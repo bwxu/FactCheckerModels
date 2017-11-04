@@ -51,14 +51,3 @@ def get_input_data(path):
         data = [[index for index in row] for row in reader]
     return data
 
-#embeddings = get_glove_vectors('data/glove.6B.300d.txt')
-#print(embeddings['i'])
-#print()
-#print(embeddings['like'])
-#print()
-#print(embeddings['food'])
-#print()
-#print(len(embeddings))
-#print()
-train_data = get_input_data('data/train.tsv')
-print(train_data[:10])
