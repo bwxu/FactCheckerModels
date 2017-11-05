@@ -3,7 +3,7 @@ from __future__ import print_function
 import os
 import numpy as np
 from keras.callbacks import ModelCheckpoint
-from keras.layers import Activation, Conv1D, Dense, Dropout, Embedding, Flatten, Input, MaxPooling1D, Merge
+from keras.layers import Activation, Concatenate, Conv1D, Dense, Dropout, Embedding, Flatten, Input, MaxPooling1D
 from keras.models import Model, Sequential
 from keras.optimizers import SGD
 from keras.preprocessing.sequence import pad_sequences
@@ -130,6 +130,7 @@ def cnn_model(embedding_matrix, num_words):
     
     input_node = Input(shape=(MAX_SEQUENCE_LENGTH, EMBEDDING_DIM))
     
+    # Create the convolution layer which involves using different filter sizes
     conv_list = []
     for index, filter_size in enumerate(FILTER_SIZE_LIST):
         num_filters = NUM_FILTERS[index]
@@ -138,9 +139,10 @@ def cnn_model(embedding_matrix, num_words):
         flatten = Flatten()(pool)
         conv_list.append(flatten)
     
-    conv_output = Merge(mode='concat')(conv_list)
+    concat = Concatenate()
+    conv_output = concat(conv_list)
     
-    conv_layer = Model(input=input_node, output=conv_output)
+    conv_layer = Model(inputs=input_node, outputs=conv_output)
 
     model = Sequential()
     model.add(embedding_layer)
