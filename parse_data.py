@@ -51,3 +51,10 @@ def get_input_data(path):
         data = [[index for index in row] for row in reader]
     return data
 
+def get_labels_and_sentences(path):
+    # Given a data file path, get the labels and sentences as lists
+    data = get_input_data(path)
+    labels = [datum[1] for datum in data]
+    sentences = [datum[2] for datum in data]
+    return labels, sentences
+
