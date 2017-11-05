@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+import os
 import numpy as np
 from keras.callbacks import ModelCheckpoint
 from keras.layers import Activation, Conv1D, Dense, Dropout, Embedding, Flatten, Input, MaxPooling1D, Merge
@@ -32,11 +33,15 @@ EMBEDDING_DIM = 300
 TRAIN_EMBEDDINGS = True
 FILTER_SIZE_LIST = [2, 3, 4]
 NUM_FILTERS = [128, 128, 128]
-DROPOUT_PROB = 0.8
+DROPOUT_PROB = 0.2
 
 # Training Parameters
 NUM_EPOCHS = 10
 BATCH_SIZE = 64
+
+# where to save the model
+FOLDER_NAME = "trained_models"
+FILE_NAME = "cnn.weights.hdf5"
 
 def main():
     train_model()
@@ -93,8 +98,13 @@ def train_model():
     print("Creating model... ")
     model = create_model(embedding_matrix, num_words)
     print("-- DONE --")
+    
+    # Save trained model after each epoch
+    checkpoint_file = os.path.join(FOLDER_NAME, FILE_NAME)
+    checkpoint = ModelCheckpoint(checkpoint_file, monitor='val_loss', verbose=0, save_best_only=True)
+    callbacks = [checkpoint]
 
-    model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=NUM_EPOCHS, batch_size=BATCH_SIZE)
+    model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=NUM_EPOCHS, batch_size=BATCH_SIZE, callbacks=callbacks)
 
 def create_model(embedding_matrix, num_words):
     embedding_layer = Embedding(num_words + 1,
