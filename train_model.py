@@ -100,7 +100,6 @@ def train_model():
     print("Testing trained model... ")
     # Run trained model on test_sequences
     test_labels, test_sentences = get_labels_and_sentences(TEST_DATA_PATH)
-    tokenizer.fit_on_texts(test_sentences)
     test_sequences = tokenizer.texts_to_sequences(test_sentences)
     x_test = pad_sequences(test_sequences, maxlen=MAX_SEQUENCE_LENGTH)
     y_test = to_categorical(np.asarray([LABEL_MAPPING[label] for label in test_labels]))
