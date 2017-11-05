@@ -90,23 +90,38 @@ def train_model():
             embedding = embeddings.get(word, None)
             if embedding is not None:
                 embedding_matrix[rank] = embedding
-
-    print(embedding_matrix.shape)
-    # if the number of words was less than the max, set the max to the number of words
     print("-- DONE --")
     
     print("Creating model... ")
-    model = create_model(embedding_matrix, num_words)
+    model = cnn_model(embedding_matrix, num_words)
     print("-- DONE --")
     
     # Save trained model after each epoch
     checkpoint_file = os.path.join(FOLDER_NAME, FILE_NAME)
     checkpoint = ModelCheckpoint(checkpoint_file, monitor='val_loss', verbose=0, save_best_only=True)
     callbacks = [checkpoint]
-
+    
+    print("Training model... ")
     model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=NUM_EPOCHS, batch_size=BATCH_SIZE, callbacks=callbacks)
+    print("-- DONE --")
 
-def create_model(embedding_matrix, num_words):
+    print("Testing trained model... ")
+    # Run trained model on test_sequences
+    test_data = get_input_data(TEST_DATA_PATH)
+    test_labels = [data[1] for data in test_data]
+    test_sentences = [data[2] for data in test_data]
+    tokenizer.fit_on_texts(test_sentences)
+    test_sequences = tokenizer.texts_to_sequences(test_sentences)
+    x_test = pad_sequences(test_sequences, maxlen=MAX_SEQUENCE_LENGTH)
+    test_labels = [LABEL_MAPPING[label] for label in test_labels]
+    y_test = to_categorical(np.asarray(test_labels))
+    
+    score = model.evaluate(x_test, y_test, batch_size=BATCH_SIZE)
+    print()
+    print("test loss = %0.4f, test acc = %0.4f" % (score[0], score[1]))
+    print("-- DONE --")
+
+def cnn_model(embedding_matrix, num_words):
     embedding_layer = Embedding(num_words + 1,
                                 EMBEDDING_DIM,
                                 weights=[embedding_matrix],
@@ -138,6 +153,7 @@ def create_model(embedding_matrix, num_words):
     model.compile(loss='categorical_crossentropy',
                   optimizer=SGD(),
                   metrics=['acc'])
+    model.summary()
     return model
 
 if __name__ == '__main__':
