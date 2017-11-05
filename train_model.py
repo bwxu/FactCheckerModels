@@ -18,12 +18,12 @@ VALIDATION_DATA_PATH = "data/valid.tsv"
 TEST_DATA_PATH = "data/test.tsv"
 
 # Argument for preparing setences, labels, and embedding matrix
-LABEL_MAPPING = {"pants-fire": 1, 
-                 "false": 2,
-                 "barely-true": 3,
-                 "half-true": 4,
-                 "mostly-true": 5,
-                 "true": 6}
+LABEL_MAPPING = {"pants-fire": 0, 
+                 "false": 1,
+                 "barely-true": 2,
+                 "half-true": 3,
+                 "mostly-true": 4,
+                 "true": 5}
 MAX_NUM_WORDS = 20000
 MAX_SEQUENCE_LENGTH = 100
 EMBEDDING_DIM = 300
@@ -33,6 +33,10 @@ TRAIN_EMBEDDINGS = True
 FILTER_SIZE_LIST = [2, 3, 4]
 NUM_FILTERS = [128, 128, 128]
 DROPOUT_PROB = 0.8
+
+# Training Parameters
+NUM_EPOCHS = 10
+BATCH_SIZE = 64
 
 def main():
     train_model()
@@ -87,8 +91,10 @@ def train_model():
     print("-- DONE --")
     
     print("Creating model... ")
-    create_model(embedding_matrix, num_words)
+    model = create_model(embedding_matrix, num_words)
     print("-- DONE --")
+
+    model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=NUM_EPOCHS, batch_size=BATCH_SIZE)
 
 def create_model(embedding_matrix, num_words):
     embedding_layer = Embedding(num_words + 1,
@@ -103,15 +109,8 @@ def create_model(embedding_matrix, num_words):
     for index, filter_size in enumerate(FILTER_SIZE_LIST):
         num_filters = NUM_FILTERS[index]
         conv = Conv1D(filters=num_filters, kernel_size=filter_size, activation='relu')(input_node)
-        print("conv")
-        print(conv.shape)
-        print(conv.shape[1])
         pool = MaxPooling1D(pool_size=int(conv.shape[1]))(conv)
-        print("pool")
-        print(pool.shape)
         flatten = Flatten()(pool)
-        print("flatten")
-        print(flatten.shape)
         conv_list.append(flatten)
     
     conv_output = Merge(mode='concat')(conv_list)
