@@ -5,6 +5,7 @@ import io
 import math
 import numpy as np
 
+
 def get_glove_vectors(path):
     # Given a glove embeddings txt file, parse the file into a dictionary where every key 
     # in the dictionary is a word and the value is the word vector associated with the word
@@ -17,6 +18,7 @@ def get_glove_vectors(path):
             vector = np.asarray(data[1:], dtype='float32')
             embeddings[word] = vector
     return embeddings
+
 
 def get_input_data(path):
     # Given an input TSV from the liar dataset, return a list of lists where each index 
@@ -50,6 +52,7 @@ def get_input_data(path):
         reader = csv.reader(f, delimiter="\t", quotechar='"')
         data = [[index for index in row] for row in reader]
     return data
+
 
 def get_labels_and_sentences(path):
     # Given a data file path, get the labels and sentences as lists

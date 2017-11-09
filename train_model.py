@@ -1,7 +1,8 @@
 from __future__ import print_function
-
 import os
 import numpy as np
+
+from gensim.models.keyedvectors import KeyedVectors
 from keras.callbacks import ModelCheckpoint
 from keras.layers import Activation, Concatenate, Conv1D, Dense, Dropout, Embedding, Flatten, Input, MaxPooling1D
 from keras.models import Model, Sequential
@@ -13,6 +14,8 @@ from keras.utils.np_utils import to_categorical
 from parse_data import get_glove_vectors, get_labels_and_sentences
 
 # Location of data files
+USE_WORD2VEC = True
+WORD2VEC_BIN_PATH = "data/GoogleNews-vectors-negative300.bin"
 GLOVE_VECTOR_PATH = "data/glove.840B.300d.txt"
 TRAINING_DATA_PATH = "data/train.tsv"
 VALIDATION_DATA_PATH = "data/valid.tsv"
@@ -26,7 +29,7 @@ LABEL_MAPPING = {"pants-fire": 0,
                  "mostly-true": 4,
                  "true": 5}
 MAX_NUM_WORDS = 20000
-MAX_SEQUENCE_LENGTH = 100
+MAX_SEQUENCE_LENGTH = 67
 EMBEDDING_DIM = 300
 
 # Parameters for Model
@@ -36,7 +39,7 @@ NUM_FILTERS = [128, 128, 128]
 DROPOUT_PROB = 0.2
 
 # Training Parameters
-NUM_EPOCHS = 10
+NUM_EPOCHS = 20
 BATCH_SIZE = 64
 
 # where to save the model
@@ -48,7 +51,11 @@ def main():
 
 def train_model():
     print("Reading word vectors... ")
-    embeddings = get_glove_vectors(GLOVE_VECTOR_PATH)
+    embeddings = None
+    if USE_WORD2VEC:
+        embeddings = KeyedVectors.load_word2vec_format(WORD2VEC_BIN_PATH, binary=True)
+    else:
+        embeddings = get_glove_vectors(GLOVE_VECTOR_PATH)
     print("--- DONE ---")
 
     print("Getting input data... ")
@@ -79,7 +86,12 @@ def train_model():
     embedding_matrix = np.zeros((num_words + 1, EMBEDDING_DIM))
     for word, rank in word_index.items():
         if rank <= MAX_NUM_WORDS:
-            embedding = embeddings.get(word, None)
+            embedding = None
+            if USE_WORD2VEC:
+                if word in embeddings.vocab:
+                    embedding = embeddings[word]
+            else:
+                embedding = embeddings.get(word, None)
             if embedding is not None:
                 embedding_matrix[rank] = embedding
     print("--- DONE ---")
