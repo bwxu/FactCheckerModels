@@ -14,7 +14,7 @@ from keras.utils.np_utils import to_categorical
 from parse_data import get_glove_vectors, get_labels_and_sentences
 
 # Location of data files
-USE_WORD2VEC = True
+USE_WORD2VEC = False
 WORD2VEC_BIN_PATH = "data/GoogleNews-vectors-negative300.bin"
 GLOVE_VECTOR_PATH = "data/glove.840B.300d.txt"
 TRAINING_DATA_PATH = "data/train.tsv"
@@ -68,7 +68,7 @@ def train_model():
     # each integer maps to a word and the sequence only considers the first 100
     # words in the statement being evaluated
     tokenizer = Tokenizer(num_words=MAX_NUM_WORDS)
-    tokenizer.fit_on_texts(train_sentences + val_sentences)
+    tokenizer.fit_on_texts(train_sentences)
     train_sequences = tokenizer.texts_to_sequences(train_sentences)
     val_sequences = tokenizer.texts_to_sequences(val_sentences)
     word_index = tokenizer.word_index
