@@ -44,7 +44,7 @@ BATCH_SIZE = 64
 
 # where to save the model
 FOLDER_NAME = "trained_models"
-FILE_NAME = "cnn.weights.hdf5"
+FILE_NAME = "epoch-{epoch:02d}-val_acc-{val_acc:.4f}.hdf5"
 
 def main():
     train_model()
@@ -103,7 +103,7 @@ def train_model():
     print("Training model... ")
     # Save trained model after each epoch
     checkpoint_file = os.path.join(FOLDER_NAME, FILE_NAME)
-    checkpoint = ModelCheckpoint(checkpoint_file, monitor='val_loss', verbose=0, save_best_only=True)
+    checkpoint = ModelCheckpoint(checkpoint_file, monitor='val_acc', verbose=1, save_best_only=True)
     callbacks = [checkpoint]
     
     model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=NUM_EPOCHS, batch_size=BATCH_SIZE, callbacks=callbacks)
