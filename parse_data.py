@@ -54,10 +54,11 @@ def get_input_data(path):
     return data
 
 
-def get_labels_and_sentences(path):
+def get_labels_sentences_subjects(path):
     # Given a data file path, get the labels and sentences as lists
     data = get_input_data(path)
     labels = [datum[1] for datum in data]
     sentences = [datum[2] for datum in data]
-    return labels, sentences
+    subjects = [datum[3].split(',') for datum in data]
+    return labels, sentences, subjects
 

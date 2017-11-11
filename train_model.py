@@ -11,7 +11,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 from keras.utils.np_utils import to_categorical
 
-from parse_data import get_glove_vectors, get_labels_and_sentences
+from parse_data import get_glove_vectors, get_labels_sentences_subjects
 
 # Location of data files
 USE_WORD2VEC = False
@@ -44,7 +44,7 @@ BATCH_SIZE = 64
 
 # Parameters for saving the trained model
 FOLDER_NAME = "models"
-FILE_NAME = "epoch-{epoch:02d}-val_acc-{val_acc:.4f}.hdf5"
+FILE_NAME = "subjects-epoch-{epoch:02d}-val_acc-{val_acc:.4f}.hdf5"
 
 
 def train_model():
@@ -57,8 +57,8 @@ def train_model():
     print("--- DONE ---")
 
     print("Getting input data... ")
-    train_labels, train_sentences = get_labels_and_sentences(TRAINING_DATA_PATH)
-    val_labels, val_sentences = get_labels_and_sentences(VALIDATION_DATA_PATH)
+    train_labels, train_sentences, train_subjects = get_labels_sentences_subjects(TRAINING_DATA_PATH)
+    val_labels, val_sentences, val_subjects = get_labels_sentences_subjects(VALIDATION_DATA_PATH)
     print("--- DONE ---")
 
     print("Preparing data for model... ")
@@ -109,7 +109,7 @@ def train_model():
 
     print("Testing trained model... ")
     # Run trained model on test_sequences
-    test_labels, test_sentences = get_labels_and_sentences(TEST_DATA_PATH)
+    test_labels, test_sentences, test_subjects = get_labels_sentences_subjects(TEST_DATA_PATH)
     test_sequences = tokenizer.texts_to_sequences(test_sentences)
     x_test = pad_sequences(test_sequences, maxlen=MAX_SEQUENCE_LENGTH)
     y_test = to_categorical(np.asarray([LABEL_MAPPING[label] for label in test_labels]))
