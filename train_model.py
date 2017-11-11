@@ -43,7 +43,7 @@ NUM_EPOCHS = 20
 BATCH_SIZE = 64
 
 # where to save the model
-FOLDER_NAME = "trained_models"
+FOLDER_NAME = "models"
 FILE_NAME = "epoch-{epoch:02d}-val_acc-{val_acc:.4f}.hdf5"
 
 def main():
