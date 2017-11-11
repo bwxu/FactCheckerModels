@@ -21,7 +21,7 @@ TRAINING_DATA_PATH = "data/train.tsv"
 VALIDATION_DATA_PATH = "data/valid.tsv"
 TEST_DATA_PATH = "data/test.tsv"
 
-# Argument for preparing setences, labels, and embedding matrix
+# Arguments for preparing sentences, labels, and embedding matrix
 LABEL_MAPPING = {"pants-fire": 0, 
                  "false": 1,
                  "barely-true": 2,
@@ -32,22 +32,20 @@ MAX_NUM_WORDS = 20000
 MAX_SEQUENCE_LENGTH = 67
 EMBEDDING_DIM = 300
 
-# Parameters for Model
+# Parameters for model construction
 TRAIN_EMBEDDINGS = True
 FILTER_SIZE_LIST = [2, 3, 4]
 NUM_FILTERS = [128, 128, 128]
 DROPOUT_PROB = 0.2
 
-# Training Parameters
+# Training parameters
 NUM_EPOCHS = 20
 BATCH_SIZE = 64
 
-# where to save the model
+# Parameters for saving the trained model
 FOLDER_NAME = "models"
 FILE_NAME = "epoch-{epoch:02d}-val_acc-{val_acc:.4f}.hdf5"
 
-def main():
-    train_model()
 
 def train_model():
     print("Reading word vectors... ")
@@ -121,6 +119,7 @@ def train_model():
     print("test loss = %0.4f, test acc = %0.4f" % (score[0], score[1]))
     print("--- DONE ---")
 
+
 def cnn_model(embedding_matrix, num_words):
     # Create the convolution layer which involves using different filter sizes
     input_node = Input(shape=(MAX_SEQUENCE_LENGTH, EMBEDDING_DIM))
@@ -155,5 +154,7 @@ def cnn_model(embedding_matrix, num_words):
    
     return model
 
+
 if __name__ == '__main__':
-    main()
+    train_model()
+
