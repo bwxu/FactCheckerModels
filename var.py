@@ -31,7 +31,7 @@ BATCH_SIZE = 64
 FOLDER_NAME = "models"
 FILE_NAME = "new-epoch-{epoch:02d}-val_acc-{val_acc:.4f}.hdf5"
 
-USE_SUBJECTS = False
+USE_SUBJECTS = True
 NUM_SUBJECTS = 143
 SUBJECT_MAPPING = {}
 
