@@ -29,9 +29,9 @@ BATCH_SIZE = 64
 
 # Parameters for saving the trained model
 FOLDER_NAME = "models"
-FILE_NAME = "subjects-epoch-{epoch:02d}-val_acc-{val_acc:.4f}.hdf5"
+FILE_NAME = "new-epoch-{epoch:02d}-val_acc-{val_acc:.4f}.hdf5"
 
-USE_SUBJECTS = True
+USE_SUBJECTS = False
 NUM_SUBJECTS = 143
 SUBJECT_MAPPING = {}
 
