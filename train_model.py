@@ -4,14 +4,12 @@ import numpy as np
 
 from gensim.models.keyedvectors import KeyedVectors
 from keras.callbacks import ModelCheckpoint
-from keras.layers import Activation, Concatenate, Conv1D, Dense, Dropout, Embedding, Flatten, Input, MaxPooling1D
-from keras.models import Model, Sequential
-from keras.optimizers import SGD
 from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 from keras.utils.np_utils import to_categorical
 
 from parse_data import get_glove_vectors, get_labels_sentences_subjects, get_one_hot_vectors
+from cnn_models import cnn_model, cnn_model_with_subject
 
 # Location of data files
 USE_WORD2VEC = False
@@ -145,84 +143,6 @@ def train_model():
     print("test loss = %0.4f, test acc = %0.4f" % (score[0], score[1]))
     print("--- DONE ---")
 
-
-def cnn_model(embedding_matrix, num_words):
-    # Create the convolution layer which involves using different filter sizes
-    input_node = Input(shape=(MAX_SEQUENCE_LENGTH, EMBEDDING_DIM))
-    conv_list = []
-    for index, filter_size in enumerate(FILTER_SIZE_LIST):
-        num_filters = NUM_FILTERS[index]
-        conv = Conv1D(filters=num_filters, kernel_size=filter_size, activation='relu')(input_node)
-        pool = MaxPooling1D(pool_size=int(conv.shape[1]))(conv)
-        flatten = Flatten()(pool)
-        conv_list.append(flatten)
-    concat = Concatenate()
-    conv_output = concat(conv_list)
-    conv_layer = Model(inputs=input_node, outputs=conv_output)
-
-    # Model Definition
-    model = Sequential()
-    model.add(Embedding(num_words + 1,
-                        EMBEDDING_DIM,
-                        weights=[embedding_matrix],
-                        input_length=MAX_SEQUENCE_LENGTH,
-                        trainable=TRAIN_EMBEDDINGS))
-    model.add(conv_layer)
-    model.add(Dropout(rate=DROPOUT_PROB))
-    model.add(Dense(100))
-    model.add(Dropout(rate=DROPOUT_PROB))
-    model.add(Activation('relu'))
-    model.add(Dense(len(LABEL_MAPPING), activation='softmax'))
-    model.compile(loss='categorical_crossentropy',
-                  optimizer=SGD(),
-                  metrics=['acc'])
-    model.summary()
-   
-    return model
-
-def cnn_model_with_subject(embedding_matrix, num_words):
-    # Create the convolution layer which involves using different filter sizes
-    input_node = Input(shape=(MAX_SEQUENCE_LENGTH, EMBEDDING_DIM))
-    conv_list = []
-    for index, filter_size in enumerate(FILTER_SIZE_LIST):
-        num_filters = NUM_FILTERS[index]
-        conv = Conv1D(filters=num_filters, kernel_size=filter_size, activation='relu')(input_node)
-        pool = MaxPooling1D(pool_size=int(conv.shape[1]))(conv)
-        flatten = Flatten()(pool)
-        conv_list.append(flatten)
-    conv_output = Concatenate()(conv_list)
-    conv_layer = Model(inputs=input_node, outputs=conv_output)
-
-    # Create main embedding model
-    main_in = Input(shape=(MAX_SEQUENCE_LENGTH,), dtype='int32', name='main_in')
-    main_out = Embedding(input_dim=num_words + 1,
-                         output_dim=EMBEDDING_DIM,
-                         weights=[embedding_matrix],
-                         input_length=MAX_SEQUENCE_LENGTH,
-                         trainable=TRAIN_EMBEDDINGS)(main_in)
-    main_out = conv_layer(main_out)
-    main_out = Dropout(rate=DROPOUT_PROB)(main_out)
-
-    # Create auxiliary subject model
-    aux_in = Input(shape=(NUM_SUBJECTS,), dtype='float32', name='aux_in')
-
-    # Combine main model and auxilary model
-    combined_out = Concatenate()([main_out, aux_in])
-    combined_layer = Model(inputs=[main_in, aux_in], outputs=combined_out)
-    
-    # Model Definition
-    model = Sequential()
-    model.add(combined_layer)
-    model.add(Dense(100))
-    model.add(Dropout(rate=DROPOUT_PROB))
-    model.add(Activation('relu'))
-    model.add(Dense(len(LABEL_MAPPING), activation='softmax'))
-    model.compile(loss='categorical_crossentropy',
-                  optimizer=SGD(),
-                  metrics=['acc'])
-    model.summary()
-   
-    return model
 
 if __name__ == '__main__':
     train_model()

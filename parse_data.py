@@ -62,6 +62,7 @@ def get_labels_sentences_subjects(path):
     subjects = [datum[3].split(',') for datum in data]
     return labels, sentences, subjects
 
+
 def get_one_hot_vectors(list_of_values, length, mapping):
     vectors = []
     for values in list_of_values:
@@ -73,3 +74,4 @@ def get_one_hot_vectors(list_of_values, length, mapping):
                     vector[index] = 1
         vectors.append(vector)
     return vectors
+
