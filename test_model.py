@@ -8,7 +8,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 from keras.utils.np_utils import to_categorical
 
-from parse_data import get_labels_sentences_subjects, get_one_hot_vectors 
+from parse_data import get_labels_sentences_subjects, get_mapping, get_one_hot_vectors 
 
 import var
 
@@ -27,16 +27,10 @@ def test_model():
     x_test = pad_sequences(test_sequences, maxlen=var.MAX_SEQUENCE_LENGTH)
     y_test = to_categorical(np.asarray([var.LABEL_MAPPING[label] for label in test_labels]))
 
+    # Get the subject vectors if necessary
     if var.USE_SUBJECTS:
-        # Populate SUBJECT_MAPPING
-        subject_num = 0
-        for subjects in train_subjects:
-            for subject in subjects:
-                if subject not in var.SUBJECT_MAPPING:
-                    var.SUBJECT_MAPPING[subject] = subject_num
-                    subject_num += 1
-
-    x_test_subjects = np.asarray(get_one_hot_vectors(test_subjects, var.NUM_SUBJECTS, var.SUBJECT_MAPPING))
+        var.SUBJECT_MAPPING = get_mapping(train_subjects)
+        x_test_subjects = np.asarray(get_one_hot_vectors(test_subjects, var.NUM_SUBJECTS, var.SUBJECT_MAPPING))
 
     # Evaluate test accuracy
     if var.USE_SUBJECTS:

@@ -63,6 +63,17 @@ def get_labels_sentences_subjects(path):
     return labels, sentences, subjects
 
 
+def get_mapping(list_of_list_of_items):
+    mapping = {}
+    item_num = 0
+    for list_of_items in list_of_list_of_items:
+        for item in list_of_items:
+            if item not in mapping:
+                mapping[item] = item_num
+                item_num += 1
+    return mapping
+
+
 def get_one_hot_vectors(list_of_values, length, mapping):
     vectors = []
     for values in list_of_values:

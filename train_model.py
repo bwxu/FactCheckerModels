@@ -8,7 +8,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 from keras.utils.np_utils import to_categorical
 
-from parse_data import get_glove_vectors, get_labels_sentences_subjects, get_one_hot_vectors
+from parse_data import get_glove_vectors, get_labels_sentences_subjects, get_mapping, get_one_hot_vectors
 from cnn_models import cnn_model, cnn_model_with_subject
 import var
 
@@ -44,12 +44,8 @@ def train_model():
     y_val = to_categorical(np.asarray([var.LABEL_MAPPING[label] for label in val_labels]))
 
     # Populate SUBJECT_MAPPING with training data
-    subject_num = 0
-    for subjects in train_subjects:
-        for subject in subjects:
-            if subject not in var.SUBJECT_MAPPING:
-                var.SUBJECT_MAPPING[subject] = subject_num
-                subject_num += 1
+    var.SUBJECT_MAPPING = get_mapping(train_subjects)
+    print(var.SUBJECT_MAPPING)
 
     # Create one hot vectors for the subject
     x_train_subject = np.asarray(get_one_hot_vectors(train_subjects, var.NUM_SUBJECTS, var.SUBJECT_MAPPING))
