@@ -11,12 +11,12 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 from keras.utils.np_utils import to_categorical
 
-from parse_data import get_glove_vectors, get_labels_sentences_subjects
+from parse_data import get_glove_vectors, get_labels_sentences_subjects, get_one_hot_vectors
 
 # Location of data files
 USE_WORD2VEC = False
 WORD2VEC_BIN_PATH = "data/GoogleNews-vectors-negative300.bin"
-GLOVE_VECTOR_PATH = "data/glove.840B.300d.txt"
+GLOVE_VECTOR_PATH = "data/glove.6B.300d.txt"
 TRAINING_DATA_PATH = "data/train.tsv"
 VALIDATION_DATA_PATH = "data/valid.tsv"
 TEST_DATA_PATH = "data/test.tsv"
@@ -46,6 +46,9 @@ BATCH_SIZE = 64
 FOLDER_NAME = "models"
 FILE_NAME = "subjects-epoch-{epoch:02d}-val_acc-{val_acc:.4f}.hdf5"
 
+USE_SUBJECTS = True
+NUM_SUBJECTS = 143
+SUBJECT_MAPPING = {}
 
 def train_model():
     print("Reading word vectors... ")
@@ -78,6 +81,18 @@ def train_model():
     y_train = to_categorical(np.asarray([LABEL_MAPPING[label] for label in train_labels]))
     y_val = to_categorical(np.asarray([LABEL_MAPPING[label] for label in val_labels]))
 
+    # Populate SUBJECT_MAPPING with training data
+    subject_num = 0
+    for subjects in train_subjects:
+        for subject in subjects:
+            if subject not in SUBJECT_MAPPING:
+                SUBJECT_MAPPING[subject] = subject_num
+                subject_num += 1
+
+    # Create one hot vectors for the subject
+    x_train_subject = np.asarray(get_one_hot_vectors(train_subjects, NUM_SUBJECTS, SUBJECT_MAPPING))
+    x_val_subject = np.asarray(get_one_hot_vectors(val_subjects, NUM_SUBJECTS, SUBJECT_MAPPING))
+
     # Create embedding matrix for embedding layer. Matrix will be 
     # (num_words + 1) x EMBEDDING_DIM since word_index starts at 1
     num_words = min(MAX_NUM_WORDS, len(word_index))
@@ -95,7 +110,11 @@ def train_model():
     print("--- DONE ---")
     
     print("Creating model... ")
-    model = cnn_model(embedding_matrix, num_words)
+    if USE_SUBJECTS:
+        print("  Using Subject Metadata")
+        model = cnn_model_with_subject(embedding_matrix, num_words)
+    else:
+        model = cnn_model(embedding_matrix, num_words)
     print("--- DONE ---")
    
     print("Training model... ")
@@ -104,7 +123,10 @@ def train_model():
     checkpoint = ModelCheckpoint(checkpoint_file, monitor='val_acc', verbose=1, save_best_only=True)
     callbacks = [checkpoint]
     
-    model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=NUM_EPOCHS, batch_size=BATCH_SIZE, callbacks=callbacks)
+    if USE_SUBJECTS:
+        model.fit([x_train, x_train_subject], y_train, validation_data=([x_val, x_val_subject], y_val), epochs=NUM_EPOCHS, batch_size=BATCH_SIZE, callbacks=callbacks)
+    else:
+        model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=NUM_EPOCHS, batch_size=BATCH_SIZE, callbacks=callbacks)
     print("--- DONE ---")
 
     print("Testing trained model... ")
@@ -113,8 +135,12 @@ def train_model():
     test_sequences = tokenizer.texts_to_sequences(test_sentences)
     x_test = pad_sequences(test_sequences, maxlen=MAX_SEQUENCE_LENGTH)
     y_test = to_categorical(np.asarray([LABEL_MAPPING[label] for label in test_labels]))
-    
-    score = model.evaluate(x_test, y_test, batch_size=BATCH_SIZE)
+    x_test_subject = np.asarray(get_one_hot_vectors(test_subjects, NUM_SUBJECTS, SUBJECT_MAPPING))
+
+    if USE_SUBJECTS:
+        score = model.evaluate([x_test, x_test_subject], y_test, batch_size=BATCH_SIZE)
+    else:
+        score = model.evaluate(x_test, y_test, batch_size=BATCH_SIZE)
     print()
     print("test loss = %0.4f, test acc = %0.4f" % (score[0], score[1]))
     print("--- DONE ---")
@@ -154,6 +180,49 @@ def cnn_model(embedding_matrix, num_words):
    
     return model
 
+def cnn_model_with_subject(embedding_matrix, num_words):
+    # Create the convolution layer which involves using different filter sizes
+    input_node = Input(shape=(MAX_SEQUENCE_LENGTH, EMBEDDING_DIM))
+    conv_list = []
+    for index, filter_size in enumerate(FILTER_SIZE_LIST):
+        num_filters = NUM_FILTERS[index]
+        conv = Conv1D(filters=num_filters, kernel_size=filter_size, activation='relu')(input_node)
+        pool = MaxPooling1D(pool_size=int(conv.shape[1]))(conv)
+        flatten = Flatten()(pool)
+        conv_list.append(flatten)
+    conv_output = Concatenate()(conv_list)
+    conv_layer = Model(inputs=input_node, outputs=conv_output)
+
+    # Create main embedding model
+    main_in = Input(shape=(MAX_SEQUENCE_LENGTH,), dtype='int32', name='main_in')
+    main_out = Embedding(input_dim=num_words + 1,
+                         output_dim=EMBEDDING_DIM,
+                         weights=[embedding_matrix],
+                         input_length=MAX_SEQUENCE_LENGTH,
+                         trainable=TRAIN_EMBEDDINGS)(main_in)
+    main_out = conv_layer(main_out)
+    main_out = Dropout(rate=DROPOUT_PROB)(main_out)
+
+    # Create auxiliary subject model
+    aux_in = Input(shape=(NUM_SUBJECTS,), dtype='float32', name='aux_in')
+
+    # Combine main model and auxilary model
+    combined_out = Concatenate()([main_out, aux_in])
+    combined_layer = Model(inputs=[main_in, aux_in], outputs=combined_out)
+    
+    # Model Definition
+    model = Sequential()
+    model.add(combined_layer)
+    model.add(Dense(100))
+    model.add(Dropout(rate=DROPOUT_PROB))
+    model.add(Activation('relu'))
+    model.add(Dense(len(LABEL_MAPPING), activation='softmax'))
+    model.compile(loss='categorical_crossentropy',
+                  optimizer=SGD(),
+                  metrics=['acc'])
+    model.summary()
+   
+    return model
 
 if __name__ == '__main__':
     train_model()
