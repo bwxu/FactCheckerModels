@@ -67,41 +67,43 @@ def train_model():
                 embedding_matrix[rank] = embedding
     print("--- DONE ---")
     
-    print("Creating model... ")
-    if var.USE_SUBJECTS:
-        print("  Using Subject Metadata")
-        model = cnn_model_with_subject(embedding_matrix, num_words)
-    else:
-        model = cnn_model(embedding_matrix, num_words)
-    print("--- DONE ---")
-   
-    print("Training model... ")
-    # Save trained model after each epoch
-    checkpoint_file = os.path.join(var.FOLDER_NAME, var.FILE_NAME)
-    checkpoint = ModelCheckpoint(checkpoint_file, monitor='val_acc', verbose=1, save_best_only=True)
-    callbacks = [checkpoint]
-    
-    if var.USE_SUBJECTS:
-        model.fit([x_train, x_train_subject], y_train, validation_data=([x_val, x_val_subject], y_val), epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
-    else:
-        model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
-    print("--- DONE ---")
+    for i in range(10):
+        print("Creating model... ")
+        if var.USE_SUBJECTS:
+            print("  Using Subject Metadata")
+            model = cnn_model_with_subject(embedding_matrix, num_words)
+        else:
+            model = cnn_model(embedding_matrix, num_words)
+        print("--- DONE ---")
+       
+        print("Training model... ")
+        # Save trained model after each epoch
+        checkpoint_file = os.path.join(var.FOLDER_NAME, var.FILE_NAME)
+        checkpoint = ModelCheckpoint(checkpoint_file, monitor='val_acc', verbose=1, save_best_only=True)
+        callbacks = [checkpoint]
+        
+        if var.USE_SUBJECTS:
+            model.fit([x_train, x_train_subject], y_train, validation_data=([x_val, x_val_subject], y_val), epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
+        else:
+            model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
+        print("--- DONE ---")
 
-    print("Testing trained model... ")
-    # Run trained model on test_sequences
-    test_labels, test_sentences, test_subjects = get_labels_sentences_subjects(var.TEST_DATA_PATH)
-    test_sequences = tokenizer.texts_to_sequences(test_sentences)
-    x_test = pad_sequences(test_sequences, maxlen=var.MAX_SEQUENCE_LENGTH)
-    y_test = to_categorical(np.asarray([var.LABEL_MAPPING[label] for label in test_labels]))
-    x_test_subject = np.asarray(get_one_hot_vectors(test_subjects, var.NUM_SUBJECTS, var.SUBJECT_MAPPING))
+        print("Testing trained model... ")
+        # Run trained model on test_sequences
+        test_labels, test_sentences, test_subjects = get_labels_sentences_subjects(var.TEST_DATA_PATH)
+        test_sequences = tokenizer.texts_to_sequences(test_sentences)
+        x_test = pad_sequences(test_sequences, maxlen=var.MAX_SEQUENCE_LENGTH)
+        y_test = to_categorical(np.asarray([var.LABEL_MAPPING[label] for label in test_labels]))
+        x_test_subject = np.asarray(get_one_hot_vectors(test_subjects, var.NUM_SUBJECTS, var.SUBJECT_MAPPING))
 
-    if var.USE_SUBJECTS:
-        score = model.evaluate([x_test, x_test_subject], y_test, batch_size=var.BATCH_SIZE)
-    else:
-        score = model.evaluate(x_test, y_test, batch_size=var.BATCH_SIZE)
-    print()
-    print("test loss = %0.4f, test acc = %0.4f" % (score[0], score[1]))
-    print("--- DONE ---")
+        if var.USE_SUBJECTS:
+            score = model.evaluate([x_test, x_test_subject], y_test, batch_size=var.BATCH_SIZE)
+        else:
+            score = model.evaluate(x_test, y_test, batch_size=var.BATCH_SIZE)
+        print()
+        print("test loss = %0.4f, test acc = %0.4f" % (score[0], score[1]))
+        del model
+        print("--- DONE ---")
 
 
 if __name__ == '__main__':

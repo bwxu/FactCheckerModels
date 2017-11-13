@@ -1,7 +1,7 @@
 # Location of data files
 USE_WORD2VEC = False
 WORD2VEC_BIN_PATH = "data/GoogleNews-vectors-negative300.bin"
-GLOVE_VECTOR_PATH = "data/glove.6B.300d.txt"
+GLOVE_VECTOR_PATH = "data/glove.840B.300d.txt"
 TRAINING_DATA_PATH = "data/train.tsv"
 VALIDATION_DATA_PATH = "data/valid.tsv"
 TEST_DATA_PATH = "data/test.tsv"

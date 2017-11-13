@@ -27,7 +27,7 @@ def cnn_model(embedding_matrix, num_words):
                         trainable=var.TRAIN_EMBEDDINGS))
     model.add(conv_layer)
     model.add(Dropout(rate=var.DROPOUT_PROB))
-    model.add(Dense(50))
+    model.add(Dense(100))
     model.add(Dropout(rate=var.DROPOUT_PROB))
     model.add(Activation('relu'))
     model.add(Dense(len(var.LABEL_MAPPING), activation='softmax'))
@@ -72,7 +72,7 @@ def cnn_model_with_subject(embedding_matrix, num_words):
     # Model Definition
     model = Sequential()
     model.add(combined_layer)
-    model.add(Dense(50))
+    model.add(Dense(100))
     model.add(Dropout(rate=var.DROPOUT_PROB))
     model.add(Activation('relu'))
     model.add(Dense(len(var.LABEL_MAPPING), activation='softmax'))
