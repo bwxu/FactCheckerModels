@@ -67,7 +67,7 @@ def train_model():
                 embedding_matrix[rank] = embedding
     print("--- DONE ---")
     
-    for i in range(10):
+    for i in range(var.NUM_MODELS):
         print("Creating model... ")
         if var.USE_SUBJECTS:
             print("  Using Subject Metadata")
@@ -78,8 +78,8 @@ def train_model():
        
         print("Training model... ")
         # Save trained model after each epoch
-        checkpoint_file = os.path.join(var.FOLDER_NAME, var.FILE_NAME)
-        checkpoint = ModelCheckpoint(checkpoint_file, monitor='val_acc', verbose=1, save_best_only=True)
+        checkpoint_file = os.path.join(var.FOLDER_NAME, str(i) + var.FILE_NAME)
+        checkpoint = ModelCheckpoint(checkpoint_file, monitor='val_loss', verbose=1, save_best_only=True)
         callbacks = [checkpoint]
         
         if var.USE_SUBJECTS:
@@ -95,14 +95,17 @@ def train_model():
         x_test = pad_sequences(test_sequences, maxlen=var.MAX_SEQUENCE_LENGTH)
         y_test = to_categorical(np.asarray([var.LABEL_MAPPING[label] for label in test_labels]))
         x_test_subject = np.asarray(get_one_hot_vectors(test_subjects, var.NUM_SUBJECTS, var.SUBJECT_MAPPING))
-
-        if var.USE_SUBJECTS:
-            score = model.evaluate([x_test, x_test_subject], y_test, batch_size=var.BATCH_SIZE)
-        else:
-            score = model.evaluate(x_test, y_test, batch_size=var.BATCH_SIZE)
-        print()
-        print("test loss = %0.4f, test acc = %0.4f" % (score[0], score[1]))
+        
+        
+        #if var.USE_SUBJECTS:
+        #    score = model.evaluate([x_test, x_test_subject], y_test, batch_size=var.BATCH_SIZE)
+        #else:
+        #    score = model.evaluate(x_test, y_test, batch_size=var.BATCH_SIZE)
+        #print()
+        #print("test loss = %0.4f, test acc = %0.4f" % (score[0], score[1]))
+        
         del model
+        
         print("--- DONE ---")
 
 

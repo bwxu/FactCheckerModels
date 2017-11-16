@@ -1,7 +1,7 @@
 # Location of data files
 USE_WORD2VEC = False
 WORD2VEC_BIN_PATH = "data/GoogleNews-vectors-negative300.bin"
-GLOVE_VECTOR_PATH = "data/glove.840B.300d.txt"
+GLOVE_VECTOR_PATH = "data/glove.6B.300d.txt"
 TRAINING_DATA_PATH = "data/train.tsv"
 VALIDATION_DATA_PATH = "data/valid.tsv"
 TEST_DATA_PATH = "data/test.tsv"
@@ -28,10 +28,12 @@ NUM_EPOCHS = 20
 BATCH_SIZE = 64
 
 # Parameters for saving the trained model
-FOLDER_NAME = "models"
-FILE_NAME = "new-epoch-{epoch:02d}-val_acc-{val_acc:.4f}.hdf5"
+FOLDER_NAME = "models/new"
+# FILE_NAME = "new-epoch-{epoch:02d}-val_loss-{val_loss:.4f}.hdf5"
+FILE_NAME = '_lowest_val_loss.hdf5'
 
 USE_SUBJECTS = True
 NUM_SUBJECTS = 143
 SUBJECT_MAPPING = {}
 
+NUM_MODELS = 5
