@@ -80,7 +80,8 @@ def test_model():
     best_test = sorted(model_results, key=lambda x: x[4], reverse=True)[:5]
 
     with open("stats.txt", "w") as f:
-        f.write("GLOVE = " + str(not var.USE_WORD2VEC) + " WORD2VEC = " + str(var.USE_WORD2VEC) + "\n")
+        f.write("GLOVE = " + str(not var.USE_WORD2VEC) + "\n") 
+        f.write(" WORD2VEC = " + str(var.USE_WORD2VEC) + "\n")
         f.write("SUBJECT = " + str(var.USE_SUBJECTS) + "\n")
         f.write("\n")
         f.write("Num models = " + str(len(model_results)) + "\n")
