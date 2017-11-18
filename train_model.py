@@ -1,6 +1,7 @@
 from __future__ import print_function
 import os
 import numpy as np
+from shutil import copyfile
 
 from gensim.models.keyedvectors import KeyedVectors
 from keras.callbacks import ModelCheckpoint
@@ -13,6 +14,8 @@ from cnn_models import cnn_model, cnn_model_with_subject
 import var
 
 def train_model():
+    copyfile('var.py', var.FOLDER_NAME)
+
     print("Reading word vectors... ")
     embeddings = None
     if var.USE_WORD2VEC:
@@ -68,7 +71,7 @@ def train_model():
     print("--- DONE ---")
     
     for i in range(var.NUM_MODELS):
-        print("Creating model... ")
+        print("Creating model " + str(i + 1) + " out of " + str(var.NUM_MODELS) + " ...")
         if var.USE_SUBJECTS:
             print("  Using Subject Metadata")
             model = cnn_model_with_subject(embedding_matrix, num_words)
@@ -78,7 +81,8 @@ def train_model():
        
         print("Training model... ")
         # Save trained model after each epoch
-        checkpoint_file = os.path.join(var.FOLDER_NAME, str(i) + var.FILE_NAME)
+
+        checkpoint_file = os.path.join(var.FOLDER_NAME, str(i).zfill(2) + var.FILE_NAME)
         checkpoint = ModelCheckpoint(checkpoint_file, monitor='val_loss', verbose=1, save_best_only=True)
         callbacks = [checkpoint]
         
@@ -88,13 +92,13 @@ def train_model():
             model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
         print("--- DONE ---")
 
-        print("Testing trained model... ")
+        #print("Testing trained model... ")
         # Run trained model on test_sequences
-        test_labels, test_sentences, test_subjects = get_labels_sentences_subjects(var.TEST_DATA_PATH)
-        test_sequences = tokenizer.texts_to_sequences(test_sentences)
-        x_test = pad_sequences(test_sequences, maxlen=var.MAX_SEQUENCE_LENGTH)
-        y_test = to_categorical(np.asarray([var.LABEL_MAPPING[label] for label in test_labels]))
-        x_test_subject = np.asarray(get_one_hot_vectors(test_subjects, var.NUM_SUBJECTS, var.SUBJECT_MAPPING))
+        #test_labels, test_sentences, test_subjects = get_labels_sentences_subjects(var.TEST_DATA_PATH)
+        #test_sequences = tokenizer.texts_to_sequences(test_sentences)
+        #x_test = pad_sequences(test_sequences, maxlen=var.MAX_SEQUENCE_LENGTH)
+        #y_test = to_categorical(np.asarray([var.LABEL_MAPPING[label] for label in test_labels]))
+        #x_test_subject = np.asarray(get_one_hot_vectors(test_subjects, var.NUM_SUBJECTS, var.SUBJECT_MAPPING))
         
         
         #if var.USE_SUBJECTS:
@@ -106,7 +110,7 @@ def train_model():
         
         del model
         
-        print("--- DONE ---")
+        #print("--- DONE ---")
 
 
 if __name__ == '__main__':

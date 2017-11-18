@@ -63,7 +63,7 @@ def test_model():
             val_score = model.evaluate([x_val, x_val_subjects], y_val, batch_size=var.BATCH_SIZE)
         else:
             test_score = model.evaluate(x_test, y_test, batch_size=var.BATCH_SIZE)
-            val_score = model.evalulate(x_val, y_val, batch_size=var.BATCH_SIZE)
+            val_score = model.evaluate(x_val, y_val, batch_size=var.BATCH_SIZE)
 
         print()
         print("model = " + str(path))
@@ -80,10 +80,6 @@ def test_model():
     best_test = sorted(model_results, key=lambda x: x[4], reverse=True)[:5]
 
     with open("stats.txt", "w") as f:
-        f.write("GLOVE = " + str(not var.USE_WORD2VEC) + "\n") 
-        f.write(" WORD2VEC = " + str(var.USE_WORD2VEC) + "\n")
-        f.write("SUBJECT = " + str(var.USE_SUBJECTS) + "\n")
-        f.write("\n")
         f.write("Num models = " + str(len(model_results)) + "\n")
         f.write("Average val_loss = " + str(average_val_loss) + "\n")
         f.write("Average val_acc = " + str(average_val_acc) + "\n")
@@ -99,7 +95,7 @@ def test_model():
             f.write("\t" + str(model[4]) + "\t" + str(model[0]) + "\n")
         f.write("\n")
         f.write("Results for all models:\n")
-        for model in model_results:
+        for model in sorted(model_results, key=lambda x: x[0]):
             f.write("\t" + str(model) + "\n")
 
     print()
