@@ -1,0 +1,125 @@
+GLOVE = False
+WORD2VEC = True
+SUBJECT = False
+
+Num models = 100
+Average val_loss = 1.7212
+Average val_acc = 0.244
+Average test_loss = 1.7163
+Average test_acc = 0.2451
+
+Top 5 validation accuracies:
+	0.271	14_lowest_val_loss.hdf5
+	0.2609	17_lowest_val_loss.hdf5
+	0.2593	07_lowest_val_loss.hdf5
+	0.2586	71_lowest_val_loss.hdf5
+	0.2586	01_lowest_val_loss.hdf5
+
+Top 5 test accuracies:
+	0.2707	53_lowest_val_loss.hdf5
+	0.262	65_lowest_val_loss.hdf5
+	0.2612	69_lowest_val_loss.hdf5
+	0.2597	12_lowest_val_loss.hdf5
+	0.2581	78_lowest_val_loss.hdf5
+
+Results for all models:
+	('00_lowest_val_loss.hdf5', 1.7156, 0.2461, 1.7153, 0.2463)
+	('01_lowest_val_loss.hdf5', 1.7183, 0.2586, 1.7125, 0.2455)
+	('02_lowest_val_loss.hdf5', 1.7237, 0.2422, 1.716, 0.2407)
+	('03_lowest_val_loss.hdf5', 1.7182, 0.2539, 1.7166, 0.2439)
+	('04_lowest_val_loss.hdf5', 1.7181, 0.2461, 1.717, 0.2526)
+	('05_lowest_val_loss.hdf5', 1.7197, 0.2516, 1.7111, 0.2486)
+	('06_lowest_val_loss.hdf5', 1.7154, 0.2453, 1.7165, 0.2407)
+	('07_lowest_val_loss.hdf5', 1.7191, 0.2593, 1.7106, 0.2486)
+	('08_lowest_val_loss.hdf5', 1.7158, 0.2422, 1.7116, 0.2494)
+	('09_lowest_val_loss.hdf5', 1.7169, 0.2422, 1.7167, 0.2391)
+	('10_lowest_val_loss.hdf5', 1.7276, 0.2329, 1.715, 0.2455)
+	('11_lowest_val_loss.hdf5', 1.7213, 0.2461, 1.716, 0.2431)
+	('12_lowest_val_loss.hdf5', 1.7127, 0.2523, 1.707, 0.2597)
+	('13_lowest_val_loss.hdf5', 1.716, 0.2547, 1.7151, 0.2573)
+	('14_lowest_val_loss.hdf5', 1.7149, 0.271, 1.7134, 0.2549)
+	('15_lowest_val_loss.hdf5', 1.7216, 0.2407, 1.7169, 0.2431)
+	('16_lowest_val_loss.hdf5', 1.7269, 0.2508, 1.7253, 0.2234)
+	('17_lowest_val_loss.hdf5', 1.7149, 0.2609, 1.7131, 0.2573)
+	('18_lowest_val_loss.hdf5', 1.7207, 0.2414, 1.7161, 0.2399)
+	('19_lowest_val_loss.hdf5', 1.7257, 0.2383, 1.7201, 0.251)
+	('20_lowest_val_loss.hdf5', 1.7189, 0.2298, 1.7202, 0.2557)
+	('21_lowest_val_loss.hdf5', 1.7106, 0.2547, 1.716, 0.251)
+	('22_lowest_val_loss.hdf5', 1.7239, 0.2445, 1.7127, 0.2518)
+	('23_lowest_val_loss.hdf5', 1.7233, 0.2274, 1.7139, 0.2494)
+	('24_lowest_val_loss.hdf5', 1.7223, 0.2391, 1.723, 0.2265)
+	('25_lowest_val_loss.hdf5', 1.7242, 0.2453, 1.7188, 0.2415)
+	('26_lowest_val_loss.hdf5', 1.7317, 0.2516, 1.7224, 0.2439)
+	('27_lowest_val_loss.hdf5', 1.7207, 0.257, 1.7196, 0.2328)
+	('28_lowest_val_loss.hdf5', 1.7288, 0.2313, 1.7216, 0.2407)
+	('29_lowest_val_loss.hdf5', 1.7138, 0.2516, 1.7164, 0.2265)
+	('30_lowest_val_loss.hdf5', 1.7152, 0.2508, 1.7097, 0.2518)
+	('31_lowest_val_loss.hdf5', 1.7222, 0.2531, 1.7192, 0.2455)
+	('32_lowest_val_loss.hdf5', 1.7215, 0.25, 1.7162, 0.236)
+	('33_lowest_val_loss.hdf5', 1.7175, 0.2453, 1.7158, 0.2518)
+	('34_lowest_val_loss.hdf5', 1.726, 0.2305, 1.7125, 0.2534)
+	('35_lowest_val_loss.hdf5', 1.7239, 0.2375, 1.714, 0.2557)
+	('36_lowest_val_loss.hdf5', 1.7173, 0.2508, 1.7111, 0.2541)
+	('37_lowest_val_loss.hdf5', 1.721, 0.2391, 1.7143, 0.2486)
+	('38_lowest_val_loss.hdf5', 1.7298, 0.2375, 1.7214, 0.2407)
+	('39_lowest_val_loss.hdf5', 1.7221, 0.2414, 1.7177, 0.2407)
+	('40_lowest_val_loss.hdf5', 1.7218, 0.2336, 1.7068, 0.2573)
+	('41_lowest_val_loss.hdf5', 1.7214, 0.25, 1.7175, 0.2455)
+	('42_lowest_val_loss.hdf5', 1.7199, 0.2368, 1.7158, 0.2439)
+	('43_lowest_val_loss.hdf5', 1.7206, 0.236, 1.7208, 0.2407)
+	('44_lowest_val_loss.hdf5', 1.7216, 0.2492, 1.7243, 0.2313)
+	('45_lowest_val_loss.hdf5', 1.7297, 0.2391, 1.7184, 0.2415)
+	('46_lowest_val_loss.hdf5', 1.7225, 0.2414, 1.7178, 0.232)
+	('47_lowest_val_loss.hdf5', 1.7152, 0.2407, 1.7095, 0.2463)
+	('48_lowest_val_loss.hdf5', 1.7188, 0.2391, 1.7134, 0.2391)
+	('49_lowest_val_loss.hdf5', 1.7235, 0.2477, 1.722, 0.2391)
+	('50_lowest_val_loss.hdf5', 1.728, 0.2321, 1.72, 0.2407)
+	('51_lowest_val_loss.hdf5', 1.7226, 0.243, 1.7214, 0.2407)
+	('52_lowest_val_loss.hdf5', 1.7263, 0.236, 1.713, 0.2415)
+	('53_lowest_val_loss.hdf5', 1.7174, 0.2531, 1.7097, 0.2707)
+	('54_lowest_val_loss.hdf5', 1.7238, 0.2531, 1.7221, 0.2352)
+	('55_lowest_val_loss.hdf5', 1.721, 0.2368, 1.716, 0.2463)
+	('56_lowest_val_loss.hdf5', 1.719, 0.2492, 1.712, 0.236)
+	('57_lowest_val_loss.hdf5', 1.725, 0.2445, 1.7213, 0.2431)
+	('58_lowest_val_loss.hdf5', 1.7173, 0.2344, 1.7168, 0.2502)
+	('59_lowest_val_loss.hdf5', 1.7229, 0.2368, 1.7172, 0.2423)
+	('60_lowest_val_loss.hdf5', 1.7265, 0.2407, 1.723, 0.2423)
+	('61_lowest_val_loss.hdf5', 1.7224, 0.2477, 1.7208, 0.251)
+	('62_lowest_val_loss.hdf5', 1.7162, 0.243, 1.7177, 0.2384)
+	('63_lowest_val_loss.hdf5', 1.7255, 0.2407, 1.7175, 0.2573)
+	('64_lowest_val_loss.hdf5', 1.7215, 0.2445, 1.7171, 0.2391)
+	('65_lowest_val_loss.hdf5', 1.723, 0.2407, 1.7169, 0.262)
+	('66_lowest_val_loss.hdf5', 1.7243, 0.2336, 1.7174, 0.2431)
+	('67_lowest_val_loss.hdf5', 1.7197, 0.2407, 1.7159, 0.2336)
+	('68_lowest_val_loss.hdf5', 1.7263, 0.2399, 1.7136, 0.2573)
+	('69_lowest_val_loss.hdf5', 1.7161, 0.2453, 1.7129, 0.2612)
+	('70_lowest_val_loss.hdf5', 1.7166, 0.2461, 1.7141, 0.2352)
+	('71_lowest_val_loss.hdf5', 1.7163, 0.2586, 1.7092, 0.2534)
+	('72_lowest_val_loss.hdf5', 1.722, 0.2329, 1.7068, 0.2384)
+	('73_lowest_val_loss.hdf5', 1.7252, 0.2329, 1.7132, 0.251)
+	('74_lowest_val_loss.hdf5', 1.7171, 0.2368, 1.7206, 0.2281)
+	('75_lowest_val_loss.hdf5', 1.7203, 0.2329, 1.7135, 0.2455)
+	('76_lowest_val_loss.hdf5', 1.7234, 0.2391, 1.7191, 0.2305)
+	('77_lowest_val_loss.hdf5', 1.7229, 0.2383, 1.714, 0.2368)
+	('78_lowest_val_loss.hdf5', 1.7156, 0.2562, 1.7132, 0.2581)
+	('79_lowest_val_loss.hdf5', 1.7242, 0.2407, 1.7159, 0.2557)
+	('80_lowest_val_loss.hdf5', 1.7272, 0.25, 1.717, 0.2502)
+	('81_lowest_val_loss.hdf5', 1.728, 0.2492, 1.7158, 0.2439)
+	('82_lowest_val_loss.hdf5', 1.7194, 0.2453, 1.7188, 0.2573)
+	('83_lowest_val_loss.hdf5', 1.7188, 0.2516, 1.7116, 0.2502)
+	('84_lowest_val_loss.hdf5', 1.7258, 0.2461, 1.7193, 0.2455)
+	('85_lowest_val_loss.hdf5', 1.7214, 0.2368, 1.7172, 0.2328)
+	('86_lowest_val_loss.hdf5', 1.7167, 0.2562, 1.7119, 0.2384)
+	('87_lowest_val_loss.hdf5', 1.7195, 0.2586, 1.7183, 0.2423)
+	('88_lowest_val_loss.hdf5', 1.7219, 0.2414, 1.7156, 0.2289)
+	('89_lowest_val_loss.hdf5', 1.7286, 0.2375, 1.7142, 0.251)
+	('90_lowest_val_loss.hdf5', 1.7185, 0.2375, 1.7163, 0.2486)
+	('91_lowest_val_loss.hdf5', 1.7195, 0.2492, 1.7175, 0.2526)
+	('92_lowest_val_loss.hdf5', 1.7258, 0.2391, 1.7208, 0.2352)
+	('93_lowest_val_loss.hdf5', 1.718, 0.2453, 1.7197, 0.2407)
+	('94_lowest_val_loss.hdf5', 1.7216, 0.25, 1.7151, 0.2526)
+	('95_lowest_val_loss.hdf5', 1.724, 0.2391, 1.7207, 0.2313)
+	('96_lowest_val_loss.hdf5', 1.7211, 0.2453, 1.7207, 0.2439)
+	('97_lowest_val_loss.hdf5', 1.7201, 0.2266, 1.7151, 0.247)
+	('98_lowest_val_loss.hdf5', 1.725, 0.2438, 1.7175, 0.2526)
+	('99_lowest_val_loss.hdf5', 1.7227, 0.243, 1.7183, 0.2534)
