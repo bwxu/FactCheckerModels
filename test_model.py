@@ -16,9 +16,11 @@ def test_model():
     # Load the trained model to test. Model path should be the first argument
     paths = None
     model_path = sys.argv[1]
+    folder = ''
 
     if os.path.isdir(model_path):
         paths = [os.path.join(model_path, f) for f in os.listdir(model_path) if os.path.isfile(os.path.join(model_path, f)) and f.endswith(".hdf5")]
+        folder = model_path
     elif os.path.isfile(model_path):
         paths = [model_path]
 
@@ -79,7 +81,7 @@ def test_model():
     best_val = sorted(model_results, key=lambda x: x[2], reverse=True)[:5]
     best_test = sorted(model_results, key=lambda x: x[4], reverse=True)[:5]
 
-    with open("stats.txt", "w") as f:
+    with open(os.path.join(folder, "stats.txt"), "w") as f:
         f.write("Num models = " + str(len(model_results)) + "\n")
         f.write("Average val_loss = " + str(average_val_loss) + "\n")
         f.write("Average val_acc = " + str(average_val_acc) + "\n")
@@ -101,7 +103,7 @@ def test_model():
     print()
     print("------------------------- OVERALL STATISTICS --------------------------")
     print()
-    with open("stats.txt", "r") as f:
+    with open(os.path.join(folder, "stats.txt"), "r") as f:
         print(f.read())
 
 

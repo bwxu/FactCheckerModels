@@ -14,7 +14,7 @@ from cnn_models import cnn_model, cnn_model_with_subject
 import var
 
 def train_model():
-    copyfile('var.py', var.FOLDER_NAME)
+    copyfile('var.py', os.path.join(var.FOLDER_NAME, 'var.py'))
 
     print("Reading word vectors... ")
     embeddings = None
@@ -48,7 +48,6 @@ def train_model():
 
     # Populate SUBJECT_MAPPING with training data
     var.SUBJECT_MAPPING = get_mapping(train_subjects)
-    print(var.SUBJECT_MAPPING)
 
     # Create one hot vectors for the subject
     x_train_subject = np.asarray(get_one_hot_vectors(train_subjects, var.NUM_SUBJECTS, var.SUBJECT_MAPPING))
@@ -74,9 +73,9 @@ def train_model():
         print("Creating model " + str(i + 1) + " out of " + str(var.NUM_MODELS) + " ...")
         if var.USE_SUBJECTS:
             print("  Using Subject Metadata")
-            model = cnn_model_with_subject(embedding_matrix, num_words)
+            model = cnn_model_with_subject(embedding_matrix, num_words, pooling=var.POOLING)
         else:
-            model = cnn_model(embedding_matrix, num_words)
+            model = cnn_model(embedding_matrix, num_words, pooling=var.POOLING)
         print("--- DONE ---")
        
         print("Training model... ")
@@ -92,22 +91,8 @@ def train_model():
             model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
         print("--- DONE ---")
 
-        #print("Testing trained model... ")
-        # Run trained model on test_sequences
-        #test_labels, test_sentences, test_subjects = get_labels_sentences_subjects(var.TEST_DATA_PATH)
-        #test_sequences = tokenizer.texts_to_sequences(test_sentences)
-        #x_test = pad_sequences(test_sequences, maxlen=var.MAX_SEQUENCE_LENGTH)
-        #y_test = to_categorical(np.asarray([var.LABEL_MAPPING[label] for label in test_labels]))
-        #x_test_subject = np.asarray(get_one_hot_vectors(test_subjects, var.NUM_SUBJECTS, var.SUBJECT_MAPPING))
-        
-        
-        #if var.USE_SUBJECTS:
-        #    score = model.evaluate([x_test, x_test_subject], y_test, batch_size=var.BATCH_SIZE)
-        #else:
-        #    score = model.evaluate(x_test, y_test, batch_size=var.BATCH_SIZE)
-        #print()
-        #print("test loss = %0.4f, test acc = %0.4f" % (score[0], score[1]))
-        
+        #print(model.summary())
+       
         del model
         
         #print("--- DONE ---")
