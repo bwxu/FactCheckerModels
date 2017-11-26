@@ -54,35 +54,42 @@ def get_input_data(path):
     return data
 
 
-def get_labels_sentences_subjects(path):
+def get_data(path):
     # Given a data file path, get the labels and sentences as lists
     data = get_input_data(path)
     labels = [datum[1] for datum in data]
     sentences = [datum[2] for datum in data]
     subjects = [datum[3].split(',') for datum in data]
-    return labels, sentences, subjects
+    party = [datum[7] for datum in data]
+    history = [[datum[i] for i in range(8, 13)] for datum in data]
+    return labels, sentences, subjects, party, history
 
 
 def get_mapping(list_of_list_of_items):
+    # Return a frequency mapping for each item
     mapping = {}
-    item_num = 0
     for list_of_items in list_of_list_of_items:
         for item in list_of_items:
             if item not in mapping:
-                mapping[item] = item_num
-                item_num += 1
+                mapping[item] = 0
+            mapping[item] += 1
     return mapping
 
 
 def get_one_hot_vectors(list_of_values, length, mapping):
+    # takes in list of list of values (one list per data point), length of one hot vector
+    # and a frequency mapping
+    top_values = sorted(mapping.items(), key=lambda x: x[1], reverse=True)[:length]
+    one_hot_values = {top_values[i][0]: i for i in range(len(top_values))}
+    print(top_values)
+
     vectors = []
     for values in list_of_values:
         vector = [0]*length
         for value in values:
-            if value in mapping:
-                index = mapping[value]
-                if index < length:
-                    vector[index] = 1
+            if value in one_hot_values:
+                index = one_hot_values[value]
+                vector[index] = 1
         vectors.append(vector)
     return vectors
 
