@@ -9,8 +9,8 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 from keras.utils.np_utils import to_categorical
 
-from parse_data import get_glove_vectors, get_labels_sentences_subjects, get_mapping, get_one_hot_vectors
-from cnn_models import cnn_model, cnn_model_with_subject
+from parse_data import get_glove_vectors, get_data, get_mapping, get_one_hot_vectors
+from cnn_models import cnn_model, cnn_model_with_subject, cnn_model_with_party, cnn_model_with_credit
 import var
 
 def train_model():
@@ -25,8 +25,8 @@ def train_model():
     print("--- DONE ---")
 
     print("Getting input data... ")
-    train_labels, train_sentences, train_subjects = get_labels_sentences_subjects(var.TRAINING_DATA_PATH)
-    val_labels, val_sentences, val_subjects = get_labels_sentences_subjects(var.VALIDATION_DATA_PATH)
+    train_labels, train_sentences, train_subjects, train_party, train_history = get_data(var.TRAINING_DATA_PATH)
+    val_labels, val_sentences, val_subjects, val_party, val_history = get_data(var.VALIDATION_DATA_PATH)
     print("--- DONE ---")
 
     print("Preparing data for model... ")
@@ -46,12 +46,22 @@ def train_model():
     y_train = to_categorical(np.asarray([var.LABEL_MAPPING[label] for label in train_labels]))
     y_val = to_categorical(np.asarray([var.LABEL_MAPPING[label] for label in val_labels]))
 
-    # Populate SUBJECT_MAPPING with training data
+    # Populate SUBJECT_MAPPING with freq information from training data
     var.SUBJECT_MAPPING = get_mapping(train_subjects)
 
     # Create one hot vectors for the subject
     x_train_subject = np.asarray(get_one_hot_vectors(train_subjects, var.NUM_SUBJECTS, var.SUBJECT_MAPPING))
     x_val_subject = np.asarray(get_one_hot_vectors(val_subjects, var.NUM_SUBJECTS, var.SUBJECT_MAPPING))
+
+    # convert party to list of list format
+    train_party = [[party] for party in train_party]
+    val_party = [[party] for party in val_party]
+
+    # Populate PARTY_MAPPING with training data
+    var.PARTY_MAPPING = get_mapping(train_party)
+
+    x_train_party = np.asarray(get_one_hot_vectors(train_party, var.NUM_PARTIES, var.PARTY_MAPPING))
+    x_val_party = np.asarray(get_one_hot_vectors(val_party, var.NUM_PARTIES, var.PARTY_MAPPING))
 
     # Create embedding matrix for embedding layer. Matrix will be 
     # (num_words + 1) x EMBEDDING_DIM since word_index starts at 1
@@ -74,6 +84,9 @@ def train_model():
         if var.USE_SUBJECTS:
             print("  Using Subject Metadata")
             model = cnn_model_with_subject(embedding_matrix, num_words, pooling=var.POOLING)
+        elif var.USE_PARTY:
+            print("  Using Party Metadata")
+            model = cnn_model_with_party(embedding_matrix, num_words, pooling=var.POOLING)
         else:
             model = cnn_model(embedding_matrix, num_words, pooling=var.POOLING)
         print("--- DONE ---")
@@ -87,11 +100,13 @@ def train_model():
         
         if var.USE_SUBJECTS:
             model.fit([x_train, x_train_subject], y_train, validation_data=([x_val, x_val_subject], y_val), epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
+        elif var.USE_PARTY:
+            model.fit([x_train, x_train_party], y_train, validation_data=([x_val, x_val_party], y_val), epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
         else:
             model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
         print("--- DONE ---")
 
-        #print(model.summary())
+        print(model.summary())
        
         del model
         
