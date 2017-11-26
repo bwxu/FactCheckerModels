@@ -10,7 +10,7 @@ from keras.preprocessing.text import Tokenizer
 from keras.utils.np_utils import to_categorical
 
 from parse_data import get_glove_vectors, get_data, get_mapping, get_one_hot_vectors, normalize_vectors
-from cnn_models import cnn_model, cnn_model_with_subject, cnn_model_with_party, cnn_model_with_credit
+from cnn_models import cnn_model, cnn_model_with_subject, cnn_model_with_party, cnn_model_with_credit, cnn_model_with_all
 import var
 
 def train_model():
@@ -86,7 +86,10 @@ def train_model():
     
     for i in range(var.NUM_MODELS):
         print("Creating model " + str(i + 1) + " out of " + str(var.NUM_MODELS) + " ...")
-        if var.USE_SUBJECTS:
+        if var.USE_SUBJECTS and var.USE_PARTY and var.USE_CREDIT:
+            print("  Using all subject, party, credit metadata")
+            model = cnn_model_with_all(embedding_matrix, num_words, pooling=var.POOLING)
+        elif var.USE_SUBJECTS:
             print("  Using Subject Metadata")
             model = cnn_model_with_subject(embedding_matrix, num_words, pooling=var.POOLING)
         elif var.USE_PARTY:
@@ -106,14 +109,22 @@ def train_model():
         checkpoint = ModelCheckpoint(checkpoint_file, monitor='val_loss', verbose=1, save_best_only=True)
         callbacks = [checkpoint]
         
-        if var.USE_SUBJECTS:
-            model.fit([x_train, x_train_subject], y_train, validation_data=([x_val, x_val_subject], y_val), epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
+        if var.USE_SUBJECTS and var.USE_PARTY and var.USE_CREDIT:
+            model.fit([x_train, x_train_subject, x_train_party, x_train_credit], y_train,
+                       validation_data=([x_val, x_val_subject, x_val_party, x_val_credit], y_val),
+                       epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
+        elif var.USE_SUBJECTS:
+            model.fit([x_train, x_train_subject], y_train, validation_data=([x_val, x_val_subject], y_val),
+                      epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
         elif var.USE_PARTY:
-            model.fit([x_train, x_train_party], y_train, validation_data=([x_val, x_val_party], y_val), epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
+            model.fit([x_train, x_train_party], y_train, validation_data=([x_val, x_val_party], y_val), 
+                      epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
         elif var.USE_CREDIT:
-            model.fit([x_train, x_train_credit], y_train, validation_data=([x_val, x_val_credit], y_val), epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
+            model.fit([x_train, x_train_credit], y_train, validation_data=([x_val, x_val_credit], y_val), 
+                      epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
         else:
-            model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
+            model.fit(x_train, y_train, validation_data=(x_val, y_val),
+                      epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
         print("--- DONE ---")
 
         print(model.summary())

@@ -55,23 +55,29 @@ def test_model():
         test_sequences = tokenizer.texts_to_sequences(test_sentences)
         x_test = pad_sequences(test_sequences, maxlen=var.MAX_SEQUENCE_LENGTH)
         y_test = to_categorical(np.asarray([var.LABEL_MAPPING[label] for label in test_labels]))
+        
+        var.SUBJECT_MAPPING = get_mapping(train_subjects)
+        x_test_subjects = np.asarray(get_one_hot_vectors(test_subjects, var.NUM_SUBJECTS, var.SUBJECT_MAPPING))
+        x_val_subjects = np.asarray(get_one_hot_vectors(val_subjects, var.NUM_SUBJECTS, var.SUBJECT_MAPPING))
+      
+        var.PARTY_MAPPING = get_mapping(train_party)
+        x_test_party = np.asarray(get_one_hot_vectors(test_party, var.NUM_PARTIES, var.PARTY_MAPPING))
+        x_val_party = np.asarray(get_one_hot_vectors(val_party, var.NUM_PARTIES, var.PARTY_MAPPING))
+
+        x_test_credit = np.asarray(normalize_vectors(test_credit))
+        x_val_credit = np.asarray(normalize_vectors(val_credit))
 
         # Get the subject vectors if necessary
-        if var.USE_SUBJECTS:
-            var.SUBJECT_MAPPING = get_mapping(train_subjects)
-            x_test_subjects = np.asarray(get_one_hot_vectors(test_subjects, var.NUM_SUBJECTS, var.SUBJECT_MAPPING))
-            x_val_subjects = np.asarray(get_one_hot_vectors(val_subjects, var.NUM_SUBJECTS, var.SUBJECT_MAPPING))
+        if var.USE_SUBJECTS and var.USE_PARTY and var.USE_CREDIT:
+            test_score = model.evaluate([x_test, x_test_subjects, x_test_party, x_test_credit], y_test, batch_size=var.BATCH_SIZE)
+            val_score = model.evaluate([x_val, x_val_subjects, x_val_party, x_val_credit], y_val, batch_size=var.BATCH_SIZE)
+        elif var.USE_SUBJECTS:
             test_score = model.evaluate([x_test, x_test_subjects], y_test, batch_size=var.BATCH_SIZE)
             val_score = model.evaluate([x_val, x_val_subjects], y_val, batch_size=var.BATCH_SIZE)
         elif var.USE_PARTY:
-            var.PARTY_MAPPING = get_mapping(train_party)
-            x_test_party = np.asarray(get_one_hot_vectors(test_party, var.NUM_PARTIES, var.PARTY_MAPPING))
-            x_val_party = np.asarray(get_one_hot_vectors(val_party, var.NUM_PARTIES, var.PARTY_MAPPING))
             test_score = model.evaluate([x_test, x_test_party], y_test, batch_size=var.BATCH_SIZE)
             val_score = model.evaluate([x_val, x_val_party], y_val, batch_size=var.BATCH_SIZE)
         elif var.USE_CREDIT:
-            x_test_credit = np.asarray(normalize_vectors(test_credit))
-            x_val_credit = np.asarray(normalize_vectors(val_credit))
             test_score = model.evaluate([x_test, x_test_credit], y_test, batch_size=var.BATCH_SIZE)
             val_score = model.evaluate([x_val, x_val_credit], y_val, batch_size=var.BATCH_SIZE)
         else:

@@ -23,22 +23,22 @@ FILTER_SIZE_LIST = [2, 3, 4]
 NUM_FILTERS = [128, 128, 128]
 DROPOUT_PROB = 0.2
 # "MAX" or "AVG" or "MAXOUT"
-POOLING = "MAX"
+POOLING = "MAXOUT"
 
 # Training parameters
 NUM_EPOCHS = 6
 BATCH_SIZE = 64
 
 # Parameters for saving the trained model
-FOLDER_NAME = "models/10iter/max_credit"
+FOLDER_NAME = "models/10iter/maxout_all"
 # FILE_NAME = "new-epoch-{epoch:02d}-val_loss-{val_loss:.4f}.hdf5"
 FILE_NAME = '_lowest_val_loss.hdf5'
 
-USE_SUBJECTS = False
+USE_SUBJECTS = True
 NUM_SUBJECTS = 30
 SUBJECT_MAPPING = {}
 
-USE_PARTY = False
+USE_PARTY = True
 NUM_PARTIES = 10
 PARTY_MAPPING = {}
 
