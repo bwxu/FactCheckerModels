@@ -22,20 +22,20 @@ TRAIN_EMBEDDINGS = True
 FILTER_SIZE_LIST = [2, 3, 4]
 NUM_FILTERS = [128, 128, 128]
 DROPOUT_PROB = 0.2
-# "MAX" or "AVG"
-POOLING = "MAX"
+# "MAX" or "AVG" or "MAXOUT"
+POOLING = "MAXOUT"
 
 # Training parameters
-NUM_EPOCHS = 5
+NUM_EPOCHS = 10
 BATCH_SIZE = 64
 
 # Parameters for saving the trained model
-FOLDER_NAME = "models/20_iter/max"
+FOLDER_NAME = "models/20_iter/maxout"
 # FILE_NAME = "new-epoch-{epoch:02d}-val_loss-{val_loss:.4f}.hdf5"
 FILE_NAME = '_lowest_val_loss.hdf5'
 
 USE_SUBJECTS = False
-NUM_SUBJECTS = 20
+NUM_SUBJECTS = 30
 SUBJECT_MAPPING = {}
 
-NUM_MODELS = 20
+NUM_MODELS = 10
