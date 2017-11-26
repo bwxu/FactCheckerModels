@@ -61,7 +61,7 @@ def get_data(path):
     sentences = [datum[2] for datum in data]
     subjects = [datum[3].split(',') for datum in data]
     party = [datum[7] for datum in data]
-    history = [[datum[i] for i in range(8, 13)] for datum in data]
+    history = [[int(datum[i]) for i in range(8, 13)] for datum in data]
     return labels, sentences, subjects, party, history
 
 
@@ -81,7 +81,6 @@ def get_one_hot_vectors(list_of_values, length, mapping):
     # and a frequency mapping
     top_values = sorted(mapping.items(), key=lambda x: x[1], reverse=True)[:length]
     one_hot_values = {top_values[i][0]: i for i in range(len(top_values))}
-    print(top_values)
 
     vectors = []
     for values in list_of_values:
@@ -92,4 +91,19 @@ def get_one_hot_vectors(list_of_values, length, mapping):
                 vector[index] = 1
         vectors.append(vector)
     return vectors
+
+def normalize_vectors(list_of_values):
+    normalized = []
+    for values in list_of_values:
+        sum = 0.0
+        for value in values:
+            sum += value
+        # zero sum case
+        if sum == 0:
+            sum = 1
+        normalized.append([value/sum for value in values])
+    return normalized
+
+
+
 

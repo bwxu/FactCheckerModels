@@ -95,7 +95,7 @@ def cnn_model_with_party(embedding_matrix, num_words, pooling="MAX"):
     main_out = conv_layer(pooling)(main_out)
     main_out = Dropout(rate=var.DROPOUT_PROB)(main_out)
 
-    # Create auxiliary subject model
+    # Create auxiliary party model
     aux_in = Input(shape=(var.NUM_PARTIES,), dtype='float32', name='aux_in')
 
     # Combine main model and auxilary model
@@ -126,8 +126,8 @@ def cnn_model_with_credit(embedding_matrix, num_words, pooling="MAX"):
     main_out = conv_layer(pooling)(main_out)
     main_out = Dropout(rate=var.DROPOUT_PROB)(main_out)
 
-    # Create auxiliary subject model
-    aux_in = Input(shape=(var.NUM_PARTIES,), dtype='float32', name='aux_in')
+    # Create auxiliary credit model
+    aux_in = Input(shape=(var.NUM_CREDIT_TYPES,), dtype='float32', name='aux_in')
 
     # Combine main model and auxilary model
     combined_out = Concatenate()([main_out, aux_in])
