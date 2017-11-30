@@ -107,11 +107,8 @@ def normalize_vectors(list_of_values):
 def clean_credit(labels, credit):
     # remove from credit vector the current label
     for i in range(len(labels)):
-        print(labels[i], credit[i])
         if labels[i] in var.CREDIT_MAPPING:  
             remove_index = var.CREDIT_MAPPING[labels[i]]
-            print(remove_index)
             credit[i][remove_index] -= 1
-        print(credit[i])
     return credit
 

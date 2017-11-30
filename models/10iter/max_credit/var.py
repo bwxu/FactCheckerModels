@@ -26,7 +26,7 @@ DROPOUT_PROB = 0.2
 POOLING = "MAX"
 
 # Training parameters
-NUM_EPOCHS = 6
+NUM_EPOCHS = 10
 BATCH_SIZE = 64
 
 # Parameters for saving the trained model
@@ -44,5 +44,10 @@ PARTY_MAPPING = {}
 
 USE_CREDIT = True
 NUM_CREDIT_TYPES = 5
+CREDIT_MAPPING = {"barely-true": 0, 
+                  "false": 1, 
+                  "half-true": 2, 
+                  "mostly-true": 3, 
+                  "pants-fire": 4}
 
 NUM_MODELS = 10

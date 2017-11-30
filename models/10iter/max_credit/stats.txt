@@ -1,31 +1,31 @@
 Num models = 10
-Average val_loss = 1.5115
-Average val_acc = 0.3865
-Average test_loss = 1.5511
-Average test_acc = 0.3775
+Average val_loss = 1.6864
+Average val_acc = 0.2692
+Average test_loss = 1.6947
+Average test_acc = 0.2607
 
 Top 5 validation accuracies:
-	0.4089	02_lowest_val_loss.hdf5
-	0.4073	07_lowest_val_loss.hdf5
-	0.3933	05_lowest_val_loss.hdf5
-	0.3902	03_lowest_val_loss.hdf5
-	0.3886	01_lowest_val_loss.hdf5
+	0.2788	05_lowest_val_loss.hdf5
+	0.2757	04_lowest_val_loss.hdf5
+	0.2757	01_lowest_val_loss.hdf5
+	0.2749	06_lowest_val_loss.hdf5
+	0.2749	00_lowest_val_loss.hdf5
 
 Top 5 test accuracies:
-	0.3931	00_lowest_val_loss.hdf5
-	0.3915	01_lowest_val_loss.hdf5
-	0.3899	03_lowest_val_loss.hdf5
-	0.3836	05_lowest_val_loss.hdf5
-	0.3804	09_lowest_val_loss.hdf5
+	0.2762	05_lowest_val_loss.hdf5
+	0.2739	00_lowest_val_loss.hdf5
+	0.266	03_lowest_val_loss.hdf5
+	0.2597	04_lowest_val_loss.hdf5
+	0.2589	07_lowest_val_loss.hdf5
 
 Results for all models:
-	('00_lowest_val_loss.hdf5', 1.4985, 0.384, 1.5402, 0.3931)
-	('01_lowest_val_loss.hdf5', 1.489, 0.3886, 1.512, 0.3915)
-	('02_lowest_val_loss.hdf5', 1.4849, 0.4089, 1.5547, 0.371)
-	('03_lowest_val_loss.hdf5', 1.4752, 0.3902, 1.5193, 0.3899)
-	('04_lowest_val_loss.hdf5', 1.5353, 0.3769, 1.559, 0.3599)
-	('05_lowest_val_loss.hdf5', 1.5346, 0.3933, 1.5746, 0.3836)
-	('06_lowest_val_loss.hdf5', 1.5379, 0.3583, 1.5379, 0.3646)
-	('07_lowest_val_loss.hdf5', 1.534, 0.4073, 1.5945, 0.371)
-	('08_lowest_val_loss.hdf5', 1.5077, 0.3824, 1.5943, 0.3702)
-	('09_lowest_val_loss.hdf5', 1.5181, 0.3754, 1.524, 0.3804)
+	('00_lowest_val_loss.hdf5', 1.6806, 0.2749, 1.7023, 0.2739)
+	('01_lowest_val_loss.hdf5', 1.7, 0.2757, 1.6867, 0.2534)
+	('02_lowest_val_loss.hdf5', 1.6811, 0.2625, 1.6913, 0.2549)
+	('03_lowest_val_loss.hdf5', 1.6968, 0.2718, 1.6918, 0.266)
+	('04_lowest_val_loss.hdf5', 1.6856, 0.2757, 1.6953, 0.2597)
+	('05_lowest_val_loss.hdf5', 1.6658, 0.2788, 1.674, 0.2762)
+	('06_lowest_val_loss.hdf5', 1.6886, 0.2749, 1.7073, 0.2526)
+	('07_lowest_val_loss.hdf5', 1.6806, 0.2539, 1.6974, 0.2589)
+	('08_lowest_val_loss.hdf5', 1.6913, 0.264, 1.7015, 0.2541)
+	('09_lowest_val_loss.hdf5', 1.6933, 0.2601, 1.6999, 0.2573)

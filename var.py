@@ -26,19 +26,19 @@ DROPOUT_PROB = 0.2
 POOLING = "MAXOUT"
 
 # Training parameters
-NUM_EPOCHS = 6
+NUM_EPOCHS = 10
 BATCH_SIZE = 64
 
 # Parameters for saving the trained model
-FOLDER_NAME = "models/10iter/maxout_all"
+FOLDER_NAME = "models/10iter/maxout_credit"
 # FILE_NAME = "new-epoch-{epoch:02d}-val_loss-{val_loss:.4f}.hdf5"
 FILE_NAME = '_lowest_val_loss.hdf5'
 
-USE_SUBJECTS = True
+USE_SUBJECTS = False
 NUM_SUBJECTS = 30
 SUBJECT_MAPPING = {}
 
-USE_PARTY = True
+USE_PARTY = False
 NUM_PARTIES = 10
 PARTY_MAPPING = {}
 
