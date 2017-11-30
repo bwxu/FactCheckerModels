@@ -23,14 +23,14 @@ FILTER_SIZE_LIST = [2, 3, 4]
 NUM_FILTERS = [128, 128, 128]
 DROPOUT_PROB = 0.2
 # "MAX" or "AVG" or "MAXOUT"
-POOLING = "MAX"
+POOLING = "AVG"
 
 # Training parameters
-NUM_EPOCHS = 6
+NUM_EPOCHS = 10
 BATCH_SIZE = 64
 
 # Parameters for saving the trained model
-FOLDER_NAME = "models/10iter/max_all"
+FOLDER_NAME = "models/10iter/avg_all"
 # FILE_NAME = "new-epoch-{epoch:02d}-val_loss-{val_loss:.4f}.hdf5"
 FILE_NAME = '_lowest_val_loss.hdf5'
 
@@ -44,5 +44,10 @@ PARTY_MAPPING = {}
 
 USE_CREDIT = True
 NUM_CREDIT_TYPES = 5
+CREDIT_MAPPING = {"barely-true": 0, 
+                  "false": 1, 
+                  "half-true": 2, 
+                  "mostly-true": 3, 
+                  "pants-fire": 4}
 
 NUM_MODELS = 10

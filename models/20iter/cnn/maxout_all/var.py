@@ -6,9 +6,6 @@ TRAINING_DATA_PATH = "data/train.tsv"
 VALIDATION_DATA_PATH = "data/valid.tsv"
 TEST_DATA_PATH = "data/test.tsv"
 
-# CNN, LSTM, or LSTM_CNN
-MODEL_TYPE = "LSTM"
-
 # Arguments for preparing sentences, labels, and embedding matrix
 LABEL_MAPPING = {"pants-fire": 0, 
                  "false": 1,
@@ -26,26 +23,26 @@ FILTER_SIZE_LIST = [2, 3, 4]
 NUM_FILTERS = [128, 128, 128]
 DROPOUT_PROB = 0.2
 # "MAX" or "AVG" or "MAXOUT"
-POOLING = "MAX"
+POOLING = "MAXOUT"
 
 # Training parameters
 NUM_EPOCHS = 10
 BATCH_SIZE = 64
 
 # Parameters for saving the trained model
-FOLDER_NAME = "models/20iter/lstm/no_meta"
+FOLDER_NAME = "models/10iter/maxout_all"
 # FILE_NAME = "new-epoch-{epoch:02d}-val_loss-{val_loss:.4f}.hdf5"
 FILE_NAME = '_lowest_val_loss.hdf5'
 
-USE_SUBJECTS = False
+USE_SUBJECTS = True
 NUM_SUBJECTS = 30
 SUBJECT_MAPPING = {}
 
-USE_PARTY = False
+USE_PARTY = True
 NUM_PARTIES = 10
 PARTY_MAPPING = {}
 
-USE_CREDIT = False
+USE_CREDIT = True
 NUM_CREDIT_TYPES = 5
 CREDIT_MAPPING = {"barely-true": 0, 
                   "false": 1, 

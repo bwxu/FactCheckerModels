@@ -11,6 +11,7 @@ from keras.utils.np_utils import to_categorical
 
 from parse_data import clean_credit, get_glove_vectors, get_data, get_mapping, get_one_hot_vectors, normalize_vectors
 from cnn_models import cnn_model, cnn_model_with_subject, cnn_model_with_party, cnn_model_with_credit, cnn_model_with_all
+from lstm_models import lstm_model
 import var
 
 def train_model():
@@ -90,20 +91,25 @@ def train_model():
     
     for i in range(var.NUM_MODELS):
         print("Creating model " + str(i + 1) + " out of " + str(var.NUM_MODELS) + " ...")
-        if var.USE_SUBJECTS and var.USE_PARTY and var.USE_CREDIT:
-            print("  Using all subject, party, credit metadata")
-            model = cnn_model_with_all(embedding_matrix, num_words, pooling=var.POOLING)
-        elif var.USE_SUBJECTS:
-            print("  Using Subject Metadata")
-            model = cnn_model_with_subject(embedding_matrix, num_words, pooling=var.POOLING)
-        elif var.USE_PARTY:
-            print("  Using Party Metadata")
-            model = cnn_model_with_party(embedding_matrix, num_words, pooling=var.POOLING)
-        elif var.USE_CREDIT:
-            print("  Using Credit Metadata")
-            model = cnn_model_with_credit(embedding_matrix, num_words, pooling=var.POOLING)
+        if var.MODEL_TYPE == "CNN":
+            if var.USE_SUBJECTS and var.USE_PARTY and var.USE_CREDIT:
+                print("  Using all subject, party, credit metadata")
+                model = cnn_model_with_all(embedding_matrix, num_words, pooling=var.POOLING)
+            elif var.USE_SUBJECTS:
+                print("  Using Subject Metadata")
+                model = cnn_model_with_subject(embedding_matrix, num_words, pooling=var.POOLING)
+            elif var.USE_PARTY:
+                print("  Using Party Metadata")
+                model = cnn_model_with_party(embedding_matrix, num_words, pooling=var.POOLING)
+            elif var.USE_CREDIT:
+                print("  Using Credit Metadata")
+                model = cnn_model_with_credit(embedding_matrix, num_words, pooling=var.POOLING)
+            else:
+                model = cnn_model(embedding_matrix, num_words, pooling=var.POOLING)
+        elif var.MODEL_TYPE == "LSTM":
+            model = lstm_model(embedding_matrix, num_words)
         else:
-            model = cnn_model(embedding_matrix, num_words, pooling=var.POOLING)
+            raise Exception("Invalid MODEL_TYPE")
         print("--- DONE ---")
        
         print("Training model... ")
