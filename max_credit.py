@@ -1,8 +1,7 @@
 from __future__ import print_function
 
-from parse_data import get_data
+from parse_data import clean_credit, get_data
 import var
-
 
 def max_credit_model():
     print("NUM CORRECT", "\t", "ACCURACY")
@@ -20,10 +19,8 @@ def max_credit_model():
     
     train_correct = 0.0
 
+    train_credit = clean_credit(train_labels, train_credit)
     for i in range(len(train_labels)):
-        if train_labels[i] != "true":
-            remove_index = credit_mapping.index(train_labels[i])
-        train_credit[i][remove_index] -= 1
         max_credit_index = train_credit[i].index(max(train_credit[i]))
         if credit_mapping[max_credit_index] == train_labels[i]:
             train_correct += 1.0
@@ -32,10 +29,8 @@ def max_credit_model():
 
     val_correct = 0.0
 
+    val_credit = clean_credit(val_labels, val_credit)
     for i in range(len(val_labels)):
-        if val_labels[i] != "true":
-            remove_index = credit_mapping.index(val_labels[i])
-        val_credit[i][remove_index] -= 1
         max_credit_index = val_credit[i].index(max(val_credit[i]))
         if credit_mapping[max_credit_index] == val_labels[i]:
             val_correct += 1.0
@@ -44,10 +39,8 @@ def max_credit_model():
 
     test_correct = 0.0
 
+    test_credit = clean_credit(test_labels, test_credit)
     for i in range(len(test_labels)):
-        if test_labels[i] != "true":
-            remove_index = credit_mapping.index(test_labels[i])
-        test_credit[i][remove_index] -= 1
         max_credit_index = test_credit[i].index(max(test_credit[i]))
         if credit_mapping[max_credit_index] == test_labels[i]:
             test_correct += 1.0

@@ -8,7 +8,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 from keras.utils.np_utils import to_categorical
 
-from parse_data import get_data, get_mapping, get_one_hot_vectors, normalize_vectors 
+from parse_data import get_data, get_mapping, get_one_hot_vectors, normalize_vectors, clean_credit 
 
 import var
 
@@ -64,6 +64,8 @@ def test_model():
         x_test_party = np.asarray(get_one_hot_vectors(test_party, var.NUM_PARTIES, var.PARTY_MAPPING))
         x_val_party = np.asarray(get_one_hot_vectors(val_party, var.NUM_PARTIES, var.PARTY_MAPPING))
 
+        test_credit = clean_credit(test_labels, test_credit)
+        val_credit = clean_credit(val_labels, val_credit)
         x_test_credit = np.asarray(normalize_vectors(test_credit))
         x_val_credit = np.asarray(normalize_vectors(val_credit))
 

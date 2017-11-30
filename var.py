@@ -44,5 +44,10 @@ PARTY_MAPPING = {}
 
 USE_CREDIT = True
 NUM_CREDIT_TYPES = 5
+CREDIT_MAPPING = {"barely-true": 0, 
+                  "false": 1, 
+                  "half-true": 2, 
+                  "mostly-true": 3, 
+                  "pants-fire": 4}
 
 NUM_MODELS = 10

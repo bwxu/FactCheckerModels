@@ -9,7 +9,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 from keras.utils.np_utils import to_categorical
 
-from parse_data import get_glove_vectors, get_data, get_mapping, get_one_hot_vectors, normalize_vectors
+from parse_data import clean_credit, get_glove_vectors, get_data, get_mapping, get_one_hot_vectors, normalize_vectors
 from cnn_models import cnn_model, cnn_model_with_subject, cnn_model_with_party, cnn_model_with_credit, cnn_model_with_all
 import var
 
@@ -60,9 +60,13 @@ def train_model():
     # Populate PARTY_MAPPING with training data
     var.PARTY_MAPPING = get_mapping(train_party)
 
-    # Get One Hot Vectors represetning Party
+    # Get One Hot Vectors representing Party
     x_train_party = np.asarray(get_one_hot_vectors(train_party, var.NUM_PARTIES, var.PARTY_MAPPING))
     x_val_party = np.asarray(get_one_hot_vectors(val_party, var.NUM_PARTIES, var.PARTY_MAPPING))
+
+    # Remove current label from credit vector
+    train_credit = clean_credit(train_labels, train_credit)
+    val_credit = clean_credit(val_labels, val_credit)
 
     # Normalize Credit Vector
     x_train_credit = np.asarray(normalize_vectors(train_credit))

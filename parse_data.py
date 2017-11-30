@@ -4,7 +4,7 @@ import csv
 import io
 import math
 import numpy as np
-
+import var
 
 def get_glove_vectors(path):
     # Given a glove embeddings txt file, parse the file into a dictionary where every key 
@@ -104,6 +104,14 @@ def normalize_vectors(list_of_values):
         normalized.append([value/sum for value in values])
     return normalized
 
-
-
+def clean_credit(labels, credit):
+    # remove from credit vector the current label
+    for i in range(len(labels)):
+        print(labels[i], credit[i])
+        if labels[i] in var.CREDIT_MAPPING:  
+            remove_index = var.CREDIT_MAPPING[labels[i]]
+            print(remove_index)
+            credit[i][remove_index] -= 1
+        print(credit[i])
+    return credit
 
