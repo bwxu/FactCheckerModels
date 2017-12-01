@@ -42,7 +42,7 @@ def cnn_model(embedding_matrix, num_words, pooling="MAX"):
                         trainable=var.TRAIN_EMBEDDINGS))
     model.add(conv_layer(pooling))
     model.add(Dropout(rate=var.DROPOUT_PROB))
-    model.add(Dense(100))
+    model.add(Dense(var.HIDDEN_LAYER_SIZE))
     model.add(Dropout(rate=var.DROPOUT_PROB))
     model.add(Activation('relu'))
     model.add(Dense(len(var.LABEL_MAPPING), activation='softmax'))
@@ -74,7 +74,7 @@ def cnn_model_with_subject(embedding_matrix, num_words, pooling="MAX"):
     # Model Definition
     model = Sequential()
     model.add(combined_layer)
-    model.add(Dense(100))
+    model.add(Dense(var.HIDDEN_LAYER_SIZE))
     model.add(Dropout(rate=var.DROPOUT_PROB))
     model.add(Activation('relu'))
     model.add(Dense(len(var.LABEL_MAPPING), activation='softmax'))
@@ -105,7 +105,7 @@ def cnn_model_with_party(embedding_matrix, num_words, pooling="MAX"):
     # Model Definition
     model = Sequential()
     model.add(combined_layer)
-    model.add(Dense(100))
+    model.add(Dense(var.HIDDEN_LAYER_SIZE))
     model.add(Dropout(rate=var.DROPOUT_PROB))
     model.add(Activation('relu'))
     model.add(Dense(len(var.LABEL_MAPPING), activation='softmax'))
@@ -136,7 +136,7 @@ def cnn_model_with_credit(embedding_matrix, num_words, pooling="MAX"):
     # Model Definition
     model = Sequential()
     model.add(combined_layer)
-    model.add(Dense(100))
+    model.add(Dense(var.HIDDEN_LAYER_SIZE))
     model.add(Dropout(rate=var.DROPOUT_PROB))
     model.add(Activation('relu'))
     model.add(Dense(len(var.LABEL_MAPPING), activation='softmax'))
@@ -169,7 +169,7 @@ def cnn_model_with_all(embedding_matrix, num_words, pooling="MAX"):
     # Model Definition
     model = Sequential()
     model.add(combined_layer)
-    model.add(Dense(100))
+    model.add(Dense(var.HIDDEN_LAYER_SIZE))
     model.add(Dropout(rate=var.DROPOUT_PROB))
     model.add(Activation('relu'))
     model.add(Dense(len(var.LABEL_MAPPING), activation='softmax'))
