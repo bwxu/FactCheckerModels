@@ -109,18 +109,18 @@ def train_model():
         elif var.MODEL_TYPE == "BI_LSTM":
             if var.USE_SUBJECTS and var.USE_PARTY and var.USE_CREDIT:
                 print("  Using all subject, party, credit metadata")
-                model = bi_lstm_model_with_all(embedding_matrix, num_words, pooling=var.POOLING)
+                model = bi_lstm_model_with_all(embedding_matrix, num_words)
             elif var.USE_SUBJECTS:
                 print("  Using Subject Metadata")
-                model = bi_lstm_model_with_subject(embedding_matrix, num_words, pooling=var.POOLING)
+                model = bi_lstm_model_with_subject(embedding_matrix, num_words)
             elif var.USE_PARTY:
                 print("  Using Party Metadata")
-                model = bi_lstm_model_with_party(embedding_matrix, num_words, pooling=var.POOLING)
+                model = bi_lstm_model_with_party(embedding_matrix, num_words)
             elif var.USE_CREDIT:
                 print("  Using Credit Metadata")
-                model = bi_lstm_model_with_credit(embedding_matrix, num_words, pooling=var.POOLING)
+                model = bi_lstm_model_with_credit(embedding_matrix, num_words)
             else:
-                model = bi_lstm_model(embedding_matrix, num_words, pooling=var.POOLING)
+                model = bi_lstm_model(embedding_matrix, num_words)
         else:
             raise Exception("Invalid MODEL_TYPE")
         print("--- DONE ---")
