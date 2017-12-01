@@ -14,7 +14,7 @@ def lstm_model(embedding_matrix, num_words):
                         weights=[embedding_matrix],
                         input_length=var.MAX_SEQUENCE_LENGTH,
                         trainable=var.TRAIN_EMBEDDINGS))
-    model.add(LSTM(128, return_sequences=True))
+    model.add(LSTM(var.LSTM_OUT_DIM, return_sequences=True))
     model.add(Flatten())
     model.add(Dropout(rate=var.DROPOUT_PROB))
     model.add(Dense(100))

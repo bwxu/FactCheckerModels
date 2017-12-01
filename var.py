@@ -6,8 +6,10 @@ TRAINING_DATA_PATH = "data/train.tsv"
 VALIDATION_DATA_PATH = "data/valid.tsv"
 TEST_DATA_PATH = "data/test.tsv"
 
-# CNN, LSTM, or LSTM_CNN
-MODEL_TYPE = "LSTM"
+# CNN, LSTM, BI_LSTM or BI_LSTM_CNN
+MODEL_TYPE = "BI_LSTM"
+LSTM_OUT_DIM = 32
+LSTM_DROPOUT = 0
 
 # Arguments for preparing sentences, labels, and embedding matrix
 LABEL_MAPPING = {"pants-fire": 0, 
@@ -29,11 +31,11 @@ DROPOUT_PROB = 0.2
 POOLING = "MAX"
 
 # Training parameters
-NUM_EPOCHS = 10
+NUM_EPOCHS = 5
 BATCH_SIZE = 64
 
 # Parameters for saving the trained model
-FOLDER_NAME = "models/20iter/lstm/no_meta"
+FOLDER_NAME = "models/bi_lstm_tuning/dim_32_drop_0"
 # FILE_NAME = "new-epoch-{epoch:02d}-val_loss-{val_loss:.4f}.hdf5"
 FILE_NAME = '_lowest_val_loss.hdf5'
 

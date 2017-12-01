@@ -64,7 +64,7 @@ def bi_lstm_model_with_subject(embedding_matrix, num_words, pooling="MAX"):
    
     return model
 
-def cnn_model_with_party(embedding_matrix, num_words, pooling="MAX"):
+def bi_lstm_model_with_party(embedding_matrix, num_words, pooling="MAX"):
     # Create main embedding model
     main_in = Input(shape=(var.MAX_SEQUENCE_LENGTH,), dtype='int32', name='main_in')
     main_out = Embedding(input_dim=num_words + 1,
@@ -97,7 +97,7 @@ def cnn_model_with_party(embedding_matrix, num_words, pooling="MAX"):
    
     return model
 
-def cnn_model_with_credit(embedding_matrix, num_words, pooling="MAX"):
+def bi_lstm_model_with_credit(embedding_matrix, num_words, pooling="MAX"):
     # Create main embedding model
     main_in = Input(shape=(var.MAX_SEQUENCE_LENGTH,), dtype='int32', name='main_in')
     main_out = Embedding(input_dim=num_words + 1,
@@ -131,7 +131,7 @@ def cnn_model_with_credit(embedding_matrix, num_words, pooling="MAX"):
    
     return model
 
-def cnn_model_with_all(embedding_matrix, num_words, pooling="MAX"):
+def bi_lstm_model_with_all(embedding_matrix, num_words, pooling="MAX"):
     # Create main embedding model
     main_in = Input(shape=(var.MAX_SEQUENCE_LENGTH,), dtype='int32', name='main_in')
     main_out = Embedding(input_dim=num_words + 1,
