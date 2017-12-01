@@ -43,7 +43,7 @@ def lstm_cnn_model(embedding_matrix, num_words, pooling="MAX"):
     model.add(LSTM(var.LSTM_OUT_DIM,
                    dropout=var.LSTM_DROPOUT, 
                    recurrent_dropout=var.LSTM_DROPOUT, 
-                   return_sequences=True)))
+                   return_sequences=True))
     model.add(conv_layer(pooling))
     model.add(Dropout(rate=var.DROPOUT_PROB))
     model.add(Dense(var.HIDDEN_LAYER_SIZE))
@@ -67,7 +67,7 @@ def lstm_cnn_model_with_subject(embedding_matrix, num_words, pooling="MAX"):
     main_out = LSTM(var.LSTM_OUT_DIM,
                     dropout=var.LSTM_DROPOUT,
                     recurrent_dropout=var.LSTM_DROPOUT,
-                    return_sequences=True))(main_out)
+                    return_sequences=True)(main_out)
     main_out = conv_layer(pooling)(main_out)
     main_out = Dropout(rate=var.DROPOUT_PROB)(main_out)
 
@@ -102,7 +102,7 @@ def lstm_cnn_model_with_party(embedding_matrix, num_words):
     main_out = LSTM(var.LSTM_OUT_DIM,
                     dropout=var.LSTM_DROPOUT,
                     recurrent_dropout=var.LSTM_DROPOUT,
-                    return_sequences=True))(main_out)
+                    return_sequences=True)(main_out)
     main_out = conv_layer(pooling)(main_out)
     main_out = Dropout(rate=var.DROPOUT_PROB)(main_out)
     
@@ -137,7 +137,7 @@ def lstm_cnn_model_with_credit(embedding_matrix, num_words):
     main_out = LSTM(var.LSTM_OUT_DIM,
                     dropout=var.LSTM_DROPOUT,
                     recurrent_dropout=var.LSTM_DROPOUT,
-                    return_sequences=True))(main_out)
+                    return_sequences=True)(main_out)
     main_out = conv_layer(pooling)(main_out)
     main_out = Dropout(rate=var.DROPOUT_PROB)(main_out)
  
@@ -172,7 +172,7 @@ def lstm_cnn_model_with_all(embedding_matrix, num_words):
     main_out = LSTM(var.LSTM_OUT_DIM,
                     dropout=var.LSTM_DROPOUT,
                     recurrent_dropout=var.LSTM_DROPOUT,
-                    return_sequences=True))(main_out)
+                    return_sequences=True)(main_out)
     main_out = conv_layer(pooling)(main_out)
     main_out = Dropout(rate=var.DROPOUT_PROB)(main_out)
 
