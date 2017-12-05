@@ -32,7 +32,7 @@ def conv_layer(pooling="MAX"):
     return Model(inputs=input_node, outputs=conv_output)
 
 
-def lstm_cnn_model(embedding_matrix, num_words, pooling="MAX"):
+def bi_lstm_cnn_model(embedding_matrix, num_words, pooling="MAX"):
     # Model Definition
     model = Sequential()
     model.add(Embedding(num_words + 1,
@@ -40,10 +40,10 @@ def lstm_cnn_model(embedding_matrix, num_words, pooling="MAX"):
                         weights=[embedding_matrix],
                         input_length=var.MAX_SEQUENCE_LENGTH,
                         trainable=var.TRAIN_EMBEDDINGS))
-    model.add(LSTM(var.LSTM_OUT_DIM,
-                   dropout=var.LSTM_DROPOUT, 
-                   recurrent_dropout=var.LSTM_DROPOUT, 
-                   return_sequences=True))
+    model.add(Bidirectional(LSTM(var.LSTM_OUT_DIM,
+                                 dropout=var.LSTM_DROPOUT, 
+                                 recurrent_dropout=var.LSTM_DROPOUT, 
+                                 return_sequences=True)))
     model.add(conv_layer(pooling))
     model.add(Dropout(rate=var.DROPOUT_PROB))
     model.add(Dense(var.HIDDEN_LAYER_SIZE))
@@ -56,7 +56,7 @@ def lstm_cnn_model(embedding_matrix, num_words, pooling="MAX"):
    
     return model
 
-def lstm_cnn_model_with_subject(embedding_matrix, num_words, pooling="MAX"):
+def bi_lstm_cnn_model_with_subject(embedding_matrix, num_words, pooling="MAX"):
     # Create main embedding model
     main_in = Input(shape=(var.MAX_SEQUENCE_LENGTH,), dtype='int32', name='main_in')
     main_out = Embedding(input_dim=num_words + 1,
@@ -64,10 +64,10 @@ def lstm_cnn_model_with_subject(embedding_matrix, num_words, pooling="MAX"):
                          weights=[embedding_matrix],
                          input_length=var.MAX_SEQUENCE_LENGTH,
                          trainable=var.TRAIN_EMBEDDINGS)(main_in)
-    main_out = LSTM(var.LSTM_OUT_DIM,
-                    dropout=var.LSTM_DROPOUT,
-                    recurrent_dropout=var.LSTM_DROPOUT,
-                    return_sequences=True)(main_out)
+    main_out = Bidirectional(LSTM(var.LSTM_OUT_DIM,
+                                  dropout=var.LSTM_DROPOUT,
+                                  recurrent_dropout=var.LSTM_DROPOUT,
+                                  return_sequences=True))(main_out)
     main_out = conv_layer(pooling)(main_out)
     main_out = Dropout(rate=var.DROPOUT_PROB)(main_out)
 
@@ -91,7 +91,7 @@ def lstm_cnn_model_with_subject(embedding_matrix, num_words, pooling="MAX"):
    
     return model
 
-def lstm_cnn_model_with_party(embedding_matrix, num_words):
+def bi_lstm_cnn_model_with_party(embedding_matrix, num_words):
     # Create main embedding model
     main_in = Input(shape=(var.MAX_SEQUENCE_LENGTH,), dtype='int32', name='main_in')
     main_out = Embedding(input_dim=num_words + 1,
@@ -99,10 +99,10 @@ def lstm_cnn_model_with_party(embedding_matrix, num_words):
                          weights=[embedding_matrix],
                          input_length=var.MAX_SEQUENCE_LENGTH,
                          trainable=var.TRAIN_EMBEDDINGS)(main_in)
-    main_out = LSTM(var.LSTM_OUT_DIM,
-                    dropout=var.LSTM_DROPOUT,
-                    recurrent_dropout=var.LSTM_DROPOUT,
-                    return_sequences=True)(main_out)
+    main_out = Bidirectional(LSTM(var.LSTM_OUT_DIM,
+                                  dropout=var.LSTM_DROPOUT,
+                                  recurrent_dropout=var.LSTM_DROPOUT,
+                                  return_sequences=True))(main_out)
     main_out = conv_layer(pooling)(main_out)
     main_out = Dropout(rate=var.DROPOUT_PROB)(main_out)
     
@@ -126,7 +126,7 @@ def lstm_cnn_model_with_party(embedding_matrix, num_words):
    
     return model
 
-def lstm_cnn_model_with_credit(embedding_matrix, num_words):
+def bi_lstm_cnn_model_with_credit(embedding_matrix, num_words):
     # Create main embedding model
     main_in = Input(shape=(var.MAX_SEQUENCE_LENGTH,), dtype='int32', name='main_in')
     main_out = Embedding(input_dim=num_words + 1,
@@ -134,10 +134,10 @@ def lstm_cnn_model_with_credit(embedding_matrix, num_words):
                          weights=[embedding_matrix],
                          input_length=var.MAX_SEQUENCE_LENGTH,
                          trainable=var.TRAIN_EMBEDDINGS)(main_in)
-    main_out = LSTM(var.LSTM_OUT_DIM,
-                    dropout=var.LSTM_DROPOUT,
-                    recurrent_dropout=var.LSTM_DROPOUT,
-                    return_sequences=True)(main_out)
+    main_out = Bidirectional(LSTM(var.LSTM_OUT_DIM,
+                                  dropout=var.LSTM_DROPOUT,
+                                  recurrent_dropout=var.LSTM_DROPOUT,
+                                  return_sequences=True))(main_out)
     main_out = conv_layer(pooling)(main_out)
     main_out = Dropout(rate=var.DROPOUT_PROB)(main_out)
  
@@ -161,7 +161,7 @@ def lstm_cnn_model_with_credit(embedding_matrix, num_words):
    
     return model
 
-def lstm_cnn_model_with_all(embedding_matrix, num_words):
+def bi_lstm_cnn_model_with_all(embedding_matrix, num_words):
     # Create main embedding model
     main_in = Input(shape=(var.MAX_SEQUENCE_LENGTH,), dtype='int32', name='main_in')
     main_out = Embedding(input_dim=num_words + 1,
@@ -169,10 +169,10 @@ def lstm_cnn_model_with_all(embedding_matrix, num_words):
                          weights=[embedding_matrix],
                          input_length=var.MAX_SEQUENCE_LENGTH,
                          trainable=var.TRAIN_EMBEDDINGS)(main_in)
-    main_out = LSTM(var.LSTM_OUT_DIM,
-                    dropout=var.LSTM_DROPOUT,
-                    recurrent_dropout=var.LSTM_DROPOUT,
-                    return_sequences=True)(main_out)
+    main_out = Bidirectional(LSTM(var.LSTM_OUT_DIM,
+                                  dropout=var.LSTM_DROPOUT,
+                                  recurrent_dropout=var.LSTM_DROPOUT,
+                                  return_sequences=True))(main_out)
     main_out = conv_layer(pooling)(main_out)
     main_out = Dropout(rate=var.DROPOUT_PROB)(main_out)
 

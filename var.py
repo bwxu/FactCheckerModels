@@ -6,7 +6,7 @@ TRAINING_DATA_PATH = "data/train.tsv"
 VALIDATION_DATA_PATH = "data/valid.tsv"
 TEST_DATA_PATH = "data/test.tsv"
 
-# CNN, LSTM, BI_LSTM or LSTM_CNN
+# CNN, LSTM, BI_LSTM or BI_LSTM_CNN
 MODEL_TYPE = "BI_LSTM"
 
 HIDDEN_LAYER_SIZE = 100

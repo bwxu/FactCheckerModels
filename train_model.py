@@ -12,7 +12,7 @@ from keras.utils.np_utils import to_categorical
 from parse_data import clean_credit, get_glove_vectors, get_data, get_mapping, get_one_hot_vectors, normalize_vectors
 from cnn_models import cnn_model, cnn_model_with_subject, cnn_model_with_party, cnn_model_with_credit, cnn_model_with_all
 from bi_lstm_models import bi_lstm_model, bi_lstm_model_with_subject, bi_lstm_model_with_party, bi_lstm_model_with_credit, bi_lstm_model_with_all
-from lstm_cnn_models import lstm_cnn_model, lstm_cnn_model_with_subject, lstm_cnn_model_with_party, lstm_cnn_model_with_credit, lstm_cnn_model_with_all
+from bi_lstm_cnn_models import bi_lstm_cnn_model, bi_lstm_cnn_model_with_subject, bi_lstm_cnn_model_with_party, bi_lstm_cnn_model_with_credit, bi_lstm_cnn_model_with_all
 import var
 
 def train_model():
@@ -122,21 +122,21 @@ def train_model():
                 model = bi_lstm_model_with_credit(embedding_matrix, num_words)
             else:
                 model = bi_lstm_model(embedding_matrix, num_words)
-        elif var.MODEL_TYPE == "LSTM_CNN":
+        elif var.MODEL_TYPE == "BI_LSTM_CNN":
             if var.USE_SUBJECTS and var.USE_PARTY and var.USE_CREDIT:
                 print("  Using all subject, party, credit metadata")
-                model = lstm_cnn_model_with_all(embedding_matrix, num_words)
+                model = bi_lstm_cnn_model_with_all(embedding_matrix, num_words)
             elif var.USE_SUBJECTS:
                 print("  Using Subject Metadata")
-                model = lstm_cnn_model_with_subject(embedding_matrix, num_words)
+                model = bi_lstm_cnn_model_with_subject(embedding_matrix, num_words)
             elif var.USE_PARTY:
                 print("  Using Party Metadata")
-                model = lstm_cnn_model_with_party(embedding_matrix, num_words)
+                model = bi_lstm_cnn_model_with_party(embedding_matrix, num_words)
             elif var.USE_CREDIT:
                 print("  Using Credit Metadata")
-                model = lstm_cnn_model_with_credit(embedding_matrix, num_words)
+                model = bi_lstm_cnn_model_with_credit(embedding_matrix, num_words)
             else:
-                model = lstm_cnn_model(embedding_matrix, num_words)
+                model = bi_lstm_cnn_model(embedding_matrix, num_words)
         else:
             raise Exception("Invalid MODEL_TYPE")
         print("--- DONE ---")
