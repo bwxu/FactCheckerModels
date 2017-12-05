@@ -6,8 +6,11 @@ TRAINING_DATA_PATH = "data/train.tsv"
 VALIDATION_DATA_PATH = "data/valid.tsv"
 TEST_DATA_PATH = "data/test.tsv"
 
-# CNN, LSTM, BI_LSTM or BI_LSTM_CNN
+# CNN, LSTM, BI_LSTM or LSTM_CNN
 MODEL_TYPE = "BI_LSTM"
+
+HIDDEN_LAYER_SIZE = 100
+
 LSTM_OUT_DIM = 64
 LSTM_DROPOUT = 0.4
 
@@ -31,11 +34,11 @@ DROPOUT_PROB = 0.2
 POOLING = "MAX"
 
 # Training parameters
-NUM_EPOCHS = 20
+NUM_EPOCHS = 10
 BATCH_SIZE = 64
 
 # Parameters for saving the trained model
-FOLDER_NAME = "models/bi_lstm_tuning/dim_64_drop_0.4"
+FOLDER_NAME = "models/bi_lstm/credit"
 # FILE_NAME = "new-epoch-{epoch:02d}-val_loss-{val_loss:.4f}.hdf5"
 FILE_NAME = '_lowest_val_loss.hdf5'
 
@@ -47,7 +50,7 @@ USE_PARTY = False
 NUM_PARTIES = 10
 PARTY_MAPPING = {}
 
-USE_CREDIT = False
+USE_CREDIT = True
 NUM_CREDIT_TYPES = 5
 CREDIT_MAPPING = {"barely-true": 0, 
                   "false": 1, 

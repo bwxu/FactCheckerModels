@@ -31,7 +31,7 @@ DROPOUT_PROB = 0.2
 POOLING = "MAX"
 
 # Training parameters
-NUM_EPOCHS = 5
+NUM_EPOCHS = 20
 BATCH_SIZE = 64
 
 # Parameters for saving the trained model

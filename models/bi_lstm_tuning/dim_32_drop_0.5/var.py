@@ -8,8 +8,8 @@ TEST_DATA_PATH = "data/test.tsv"
 
 # CNN, LSTM, BI_LSTM or BI_LSTM_CNN
 MODEL_TYPE = "BI_LSTM"
-LSTM_OUT_DIM = 64
-LSTM_DROPOUT = 0.4
+LSTM_OUT_DIM = 32
+LSTM_DROPOUT = 0.5
 
 # Arguments for preparing sentences, labels, and embedding matrix
 LABEL_MAPPING = {"pants-fire": 0, 
@@ -35,7 +35,7 @@ NUM_EPOCHS = 20
 BATCH_SIZE = 64
 
 # Parameters for saving the trained model
-FOLDER_NAME = "models/bi_lstm_tuning/dim_64_drop_0.4"
+FOLDER_NAME = "models/bi_lstm_tuning/dim_32_drop_0.5"
 # FILE_NAME = "new-epoch-{epoch:02d}-val_loss-{val_loss:.4f}.hdf5"
 FILE_NAME = '_lowest_val_loss.hdf5'
 
