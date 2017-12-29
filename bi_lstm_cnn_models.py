@@ -8,7 +8,7 @@ import var
 
 def conv_layer(pooling="MAX"):
     # Create the convolution layer which involves using different filter sizes
-    input_node = Input(shape=(var.MAX_SEQUENCE_LENGTH, var.LSTM_OUT_DIM))
+    input_node = Input(shape=(var.MAX_SEQUENCE_LENGTH, var.LSTM_OUT_DIM * 2))
     conv_list = []
     
     for index, filter_size in enumerate(var.FILTER_SIZE_LIST):
@@ -91,7 +91,7 @@ def bi_lstm_cnn_model_with_subject(embedding_matrix, num_words, pooling="MAX"):
    
     return model
 
-def bi_lstm_cnn_model_with_party(embedding_matrix, num_words):
+def bi_lstm_cnn_model_with_party(embedding_matrix, num_words, pooling="MAX"):
     # Create main embedding model
     main_in = Input(shape=(var.MAX_SEQUENCE_LENGTH,), dtype='int32', name='main_in')
     main_out = Embedding(input_dim=num_words + 1,
@@ -126,7 +126,7 @@ def bi_lstm_cnn_model_with_party(embedding_matrix, num_words):
    
     return model
 
-def bi_lstm_cnn_model_with_credit(embedding_matrix, num_words):
+def bi_lstm_cnn_model_with_credit(embedding_matrix, num_words, pooling="MAX"):
     # Create main embedding model
     main_in = Input(shape=(var.MAX_SEQUENCE_LENGTH,), dtype='int32', name='main_in')
     main_out = Embedding(input_dim=num_words + 1,
@@ -161,7 +161,7 @@ def bi_lstm_cnn_model_with_credit(embedding_matrix, num_words):
    
     return model
 
-def bi_lstm_cnn_model_with_all(embedding_matrix, num_words):
+def bi_lstm_cnn_model_with_all(embedding_matrix, num_words, pooling="MAX"):
     # Create main embedding model
     main_in = Input(shape=(var.MAX_SEQUENCE_LENGTH,), dtype='int32', name='main_in')
     main_out = Embedding(input_dim=num_words + 1,

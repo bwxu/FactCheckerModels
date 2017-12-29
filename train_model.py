@@ -13,6 +13,7 @@ from parse_data import clean_credit, get_glove_vectors, get_data, get_mapping, g
 from cnn_models import cnn_model, cnn_model_with_subject, cnn_model_with_party, cnn_model_with_credit, cnn_model_with_all
 from bi_lstm_models import bi_lstm_model, bi_lstm_model_with_subject, bi_lstm_model_with_party, bi_lstm_model_with_credit, bi_lstm_model_with_all
 from bi_lstm_cnn_models import bi_lstm_cnn_model, bi_lstm_cnn_model_with_subject, bi_lstm_cnn_model_with_party, bi_lstm_cnn_model_with_credit, bi_lstm_cnn_model_with_all
+from cnn_bi_lstm_models import cnn_bi_lstm_model, cnn_bi_lstm_model_with_subject, cnn_bi_lstm_model_with_party, cnn_bi_lstm_model_with_credit, cnn_bi_lstm_model_with_all
 import var
 
 def train_model():
@@ -125,18 +126,33 @@ def train_model():
         elif var.MODEL_TYPE == "BI_LSTM_CNN":
             if var.USE_SUBJECTS and var.USE_PARTY and var.USE_CREDIT:
                 print("  Using all subject, party, credit metadata")
-                model = bi_lstm_cnn_model_with_all(embedding_matrix, num_words)
+                model = bi_lstm_cnn_model_with_all(embedding_matrix, num_words, var.POOLING)
             elif var.USE_SUBJECTS:
                 print("  Using Subject Metadata")
-                model = bi_lstm_cnn_model_with_subject(embedding_matrix, num_words)
+                model = bi_lstm_cnn_model_with_subject(embedding_matrix, num_words, var.POOLING)
             elif var.USE_PARTY:
                 print("  Using Party Metadata")
-                model = bi_lstm_cnn_model_with_party(embedding_matrix, num_words)
+                model = bi_lstm_cnn_model_with_party(embedding_matrix, num_words, var.POOLING)
             elif var.USE_CREDIT:
                 print("  Using Credit Metadata")
-                model = bi_lstm_cnn_model_with_credit(embedding_matrix, num_words)
+                model = bi_lstm_cnn_model_with_credit(embedding_matrix, num_words, var.POOLING)
             else:
-                model = bi_lstm_cnn_model(embedding_matrix, num_words)
+                model = bi_lstm_cnn_model(embedding_matrix, num_words, var.POOLING)
+        elif var.MODEL_TYPE == "CNN_BI_LSTM":
+            if var.USE_SUBJECTS and var.USE_PARTY and var.USE_CREDIT:
+                print("  Using all subject, party, credit metadata")
+                model = cnn_bi_lstm_model_with_all(embedding_matrix, num_words)
+            elif var.USE_SUBJECTS:
+                print("  Using Subject Metadata")
+                model = cnn_bi_lstm_model_with_subject(embedding_matrix, num_words)
+            elif var.USE_PARTY:
+                print("  Using Party Metadata")
+                model = cnn_bi_lstm_model_with_party(embedding_matrix, num_words)
+            elif var.USE_CREDIT:
+                print("  Using Credit Metadata")
+                model = cnn_bi_lstm_model_with_credit(embedding_matrix, num_words)
+            else:
+                model = cnn_bi_lstm_model(embedding_matrix, num_words)
         else:
             raise Exception("Invalid MODEL_TYPE")
         print("--- DONE ---")
@@ -166,7 +182,7 @@ def train_model():
                       epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
         print("--- DONE ---")
 
-        print(model.summary())
+        model.summary()
        
         del model
         

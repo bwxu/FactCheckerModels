@@ -6,14 +6,12 @@ TRAINING_DATA_PATH = "data/train.tsv"
 VALIDATION_DATA_PATH = "data/valid.tsv"
 TEST_DATA_PATH = "data/test.tsv"
 
-# CNN, BI_LSTM, BI_LSTM_CNN, CNN_BI_LSTM
-MODEL_TYPE = "BI_LSTM"
-
-NUM_MODELS = 10
+# CNN, LSTM, BI_LSTM or BI_LSTM_CNN
+MODEL_TYPE = "BI_LSTM_CNN"
 
 HIDDEN_LAYER_SIZE = 100
 
-LSTM_OUT_DIM = 64
+LSTM_OUT_DIM = 128
 LSTM_DROPOUT = 0.4
 
 # Arguments for preparing sentences, labels, and embedding matrix
@@ -31,18 +29,16 @@ EMBEDDING_DIM = 300
 TRAIN_EMBEDDINGS = True
 FILTER_SIZE_LIST = [2, 3, 4]
 NUM_FILTERS = [128, 128, 128]
-SINGLE_FILTER_SIZE = 4
-SINGLE_NUM_FILTERS = 128
 DROPOUT_PROB = 0.2
 # "MAX" or "AVG" or "MAXOUT"
-POOLING = "MAX"
+POOLING = "AVG"
 
 # Training parameters
 NUM_EPOCHS = 10
 BATCH_SIZE = 64
 
 # Parameters for saving the trained model
-FOLDER_NAME = "models/bi_lstm_tuning/max_pooling"
+FOLDER_NAME = "models/bi_lstm_cnn_tuning/no_meta_extra_drop_128"
 # FILE_NAME = "new-epoch-{epoch:02d}-val_loss-{val_loss:.4f}.hdf5"
 FILE_NAME = '_lowest_val_loss.hdf5'
 
@@ -62,3 +58,4 @@ CREDIT_MAPPING = {"barely-true": 0,
                   "mostly-true": 3, 
                   "pants-fire": 4}
 
+NUM_MODELS = 10

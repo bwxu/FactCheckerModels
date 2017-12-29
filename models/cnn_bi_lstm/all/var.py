@@ -7,9 +7,7 @@ VALIDATION_DATA_PATH = "data/valid.tsv"
 TEST_DATA_PATH = "data/test.tsv"
 
 # CNN, BI_LSTM, BI_LSTM_CNN, CNN_BI_LSTM
-MODEL_TYPE = "BI_LSTM"
-
-NUM_MODELS = 10
+MODEL_TYPE = "CNN_BI_LSTM"
 
 HIDDEN_LAYER_SIZE = 100
 
@@ -35,26 +33,26 @@ SINGLE_FILTER_SIZE = 4
 SINGLE_NUM_FILTERS = 128
 DROPOUT_PROB = 0.2
 # "MAX" or "AVG" or "MAXOUT"
-POOLING = "MAX"
+POOLING = "AVG"
 
 # Training parameters
 NUM_EPOCHS = 10
 BATCH_SIZE = 64
 
 # Parameters for saving the trained model
-FOLDER_NAME = "models/bi_lstm_tuning/max_pooling"
+FOLDER_NAME = "models/cnn_bi_lstm/all"
 # FILE_NAME = "new-epoch-{epoch:02d}-val_loss-{val_loss:.4f}.hdf5"
 FILE_NAME = '_lowest_val_loss.hdf5'
 
-USE_SUBJECTS = False
+USE_SUBJECTS = True
 NUM_SUBJECTS = 30
 SUBJECT_MAPPING = {}
 
-USE_PARTY = False
+USE_PARTY = True
 NUM_PARTIES = 10
 PARTY_MAPPING = {}
 
-USE_CREDIT = False
+USE_CREDIT = True
 NUM_CREDIT_TYPES = 5
 CREDIT_MAPPING = {"barely-true": 0, 
                   "false": 1, 
@@ -62,3 +60,4 @@ CREDIT_MAPPING = {"barely-true": 0,
                   "mostly-true": 3, 
                   "pants-fire": 4}
 
+NUM_MODELS = 10

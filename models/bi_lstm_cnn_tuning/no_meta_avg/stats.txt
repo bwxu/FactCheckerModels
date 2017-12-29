@@ -1,0 +1,31 @@
+Num models = 10
+Average val_loss = 1.6876
+Average val_acc = 0.2703
+Average test_loss = 1.6971
+Average test_acc = 0.2695
+
+Top 5 validation accuracies:
+	0.2796	06_lowest_val_loss.hdf5
+	0.2773	02_lowest_val_loss.hdf5
+	0.2734	03_lowest_val_loss.hdf5
+	0.2726	09_lowest_val_loss.hdf5
+	0.2726	07_lowest_val_loss.hdf5
+
+Top 5 test accuracies:
+	0.2849	03_lowest_val_loss.hdf5
+	0.2794	00_lowest_val_loss.hdf5
+	0.2755	08_lowest_val_loss.hdf5
+	0.2739	07_lowest_val_loss.hdf5
+	0.2723	09_lowest_val_loss.hdf5
+
+Results for all models:
+	('00_lowest_val_loss.hdf5', 1.6896, 0.2726, 1.7101, 0.2794)
+	('01_lowest_val_loss.hdf5', 1.6963, 0.2601, 1.7001, 0.2597)
+	('02_lowest_val_loss.hdf5', 1.6858, 0.2773, 1.6966, 0.2557)
+	('03_lowest_val_loss.hdf5', 1.6815, 0.2734, 1.689, 0.2849)
+	('04_lowest_val_loss.hdf5', 1.6918, 0.2679, 1.6907, 0.2652)
+	('05_lowest_val_loss.hdf5', 1.6897, 0.2601, 1.6961, 0.2612)
+	('06_lowest_val_loss.hdf5', 1.6874, 0.2796, 1.6961, 0.2668)
+	('07_lowest_val_loss.hdf5', 1.6827, 0.2726, 1.6994, 0.2739)
+	('08_lowest_val_loss.hdf5', 1.687, 0.2671, 1.6988, 0.2755)
+	('09_lowest_val_loss.hdf5', 1.6845, 0.2726, 1.6939, 0.2723)
