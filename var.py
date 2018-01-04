@@ -13,7 +13,7 @@ VALIDATION_DATA_PATH = "data/valid.tsv"
 TEST_DATA_PATH = "data/test.tsv"
 
 # CNN, BI_LSTM, BI_LSTM_CNN, CNN_BI_LSTM, PARALLEL
-MODEL_TYPE = "CNN"
+MODEL_TYPE = "BI_LSTM"
 
 NUM_MODELS = 10
 
@@ -48,7 +48,7 @@ NUM_EPOCHS = 10
 BATCH_SIZE = 64
 
 # Parameters for saving the trained model
-FOLDER_NAME = "models/test/cnn_flex"
+FOLDER_NAME = "models/test/"
 # FILE_NAME = "new-epoch-{epoch:02d}-val_loss-{val_loss:.4f}.hdf5"
 FILE_NAME = '_lowest_val_loss.hdf5'
 

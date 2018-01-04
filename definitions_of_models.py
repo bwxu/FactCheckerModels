@@ -1,4 +1,4 @@
-from keras.layers import Activation, AveragePooling1D, Concatenate, Conv1D, Dense, Dropout, Embedding, Flatten, Input, MaxPooling1D, Permute
+from keras.layers import Activation, AveragePooling1D, Bidirectional, Concatenate, Conv1D, Dense, Dropout, Embedding, Flatten, Input, LSTM, MaxPooling1D, Permute
 from keras.models import Model, Sequential
 from keras.optimizers import SGD, Adam
 
@@ -52,9 +52,6 @@ def add_aux_metadata(in_list, out_list, subject=False, party=False, credit=False
 
 def cnn_model(embedding_matrix, num_words, pooling="MAX", subject=False, party=False, credit=False, pos=False):
     # Maintain lists of model inputs and outputs
-    in_list = []
-    out_list = []
-
     # Create main embedding model
     main_in = Input(shape=(var.MAX_SEQUENCE_LENGTH,), dtype='int32', name='main_in')
     main_out = Embedding(input_dim=num_words + 1,
@@ -65,8 +62,8 @@ def cnn_model(embedding_matrix, num_words, pooling="MAX", subject=False, party=F
     main_out = conv_layer(pooling)(main_out)
     main_out = Dropout(rate=var.DROPOUT_PROB)(main_out)
     
-    in_list.append(main_in)
-    out_list.append(main_out)
+    in_list = [main_in]
+    out_list = [main_out]
 
     add_aux_metadata(in_list, out_list, subject, party, credit, pos)
 
@@ -77,6 +74,46 @@ def cnn_model(embedding_matrix, num_words, pooling="MAX", subject=False, party=F
         combined_out = out_list
     combined_layer = Model(inputs=in_list, outputs=combined_out)
     
+    # Model Definition
+    model = Sequential()
+    model.add(combined_layer)
+    model.add(Dense(var.HIDDEN_LAYER_SIZE))
+    model.add(Dropout(rate=var.DROPOUT_PROB))
+    model.add(Activation('relu'))
+    model.add(Dense(len(var.LABEL_MAPPING), activation='softmax'))
+    model.compile(loss='categorical_crossentropy',
+                  optimizer=Adam(),
+                  metrics=['acc'])
+   
+    return model
+
+def bi_lstm_model(embedding_matrix, num_words, subject=False, party=False, credit=False, pos=False):
+    # Create main embedding model
+    main_in = Input(shape=(var.MAX_SEQUENCE_LENGTH,), dtype='int32', name='main_in')
+    main_out = Embedding(input_dim=num_words + 1,
+                         output_dim=var.EMBEDDING_DIM,
+                         weights=[embedding_matrix],
+                         input_length=var.MAX_SEQUENCE_LENGTH,
+                         trainable=var.TRAIN_EMBEDDINGS)(main_in)
+    main_out = Bidirectional(LSTM(var.LSTM_OUT_DIM,
+                                  dropout=var.LSTM_DROPOUT,
+                                  recurrent_dropout=var.LSTM_DROPOUT,
+                                  return_sequences=True))(main_out)
+    main_out = Flatten()(main_out)
+    main_out = Dropout(rate=var.DROPOUT_PROB)(main_out)
+
+    in_list = [main_in]
+    out_list = [main_out]
+
+    add_aux_metadata(in_list, out_list, subject, party, credit, pos)
+
+    # Combine main model and auxilary model
+    if len(out_list) > 1:
+        combined_out = Concatenate()(out_list)
+    else:
+        combined_out = out_list
+    combined_layer = Model(inputs=in_list, outputs=combined_out)
+   
     # Model Definition
     model = Sequential()
     model.add(combined_layer)
