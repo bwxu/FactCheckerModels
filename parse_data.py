@@ -5,6 +5,7 @@ import io
 import math
 import numpy as np
 import var
+import nltk
 
 def get_glove_vectors(path):
     # Given a glove embeddings txt file, parse the file into a dictionary where every key 
@@ -58,7 +59,8 @@ def get_data(path):
     # Given a data file path, get the labels and sentences as lists
     data = get_input_data(path)
     labels = [datum[1] for datum in data]
-    sentences = [datum[2] for datum in data]
+    # remove non-ascii characters
+    sentences = [''.join([i if ord(i) < 128 else ' ' for i in datum[2]]) for datum in data]
     subjects = [datum[3].split(',') for datum in data]
     party = [datum[7] for datum in data]
     history = [[int(datum[i]) for i in range(8, 13)] for datum in data]
@@ -111,4 +113,19 @@ def clean_credit(labels, credit):
             remove_index = var.CREDIT_MAPPING[labels[i]]
             credit[i][remove_index] -= 1
     return credit
+
+def get_pos_freqs(sentences):
+    # gets the part of speech frequency from each sentence using nltk pos_tag
+    # returns a list of pos frequencies for each sentence
+    print(var.POS_TAG_SET)
+    vector_list = []
+    for sentence in sentences:
+        tokens = nltk.tokenize.word_tokenize(sentence)
+        tagged = nltk.pos_tag(tokens)
+        vector = [0]*var.POS_TAG_SET_LENGTH
+        for tag in tagged:
+            vector[var.POS_TAG_SET[tag[1]]] += 1
+        vector_list.append(vector)
+    print(vector_list)
+    return vector_list
 

@@ -6,8 +6,8 @@ TRAINING_DATA_PATH = "data/train.tsv"
 VALIDATION_DATA_PATH = "data/valid.tsv"
 TEST_DATA_PATH = "data/test.tsv"
 
-# CNN, BI_LSTM, BI_LSTM_CNN, CNN_BI_LSTM
-MODEL_TYPE = "BI_LSTM"
+# CNN, BI_LSTM, BI_LSTM_CNN, CNN_BI_LSTM, PARALLEL
+MODEL_TYPE = "PARALLEL"
 
 NUM_MODELS = 10
 
@@ -35,14 +35,14 @@ SINGLE_FILTER_SIZE = 4
 SINGLE_NUM_FILTERS = 128
 DROPOUT_PROB = 0.2
 # "MAX" or "AVG" or "MAXOUT"
-POOLING = "MAX"
+POOLING = "AVG"
 
 # Training parameters
 NUM_EPOCHS = 10
 BATCH_SIZE = 64
 
 # Parameters for saving the trained model
-FOLDER_NAME = "models/bi_lstm_tuning/max_pooling"
+FOLDER_NAME = "models/parallel/all"
 # FILE_NAME = "new-epoch-{epoch:02d}-val_loss-{val_loss:.4f}.hdf5"
 FILE_NAME = '_lowest_val_loss.hdf5'
 
@@ -55,10 +55,28 @@ NUM_PARTIES = 10
 PARTY_MAPPING = {}
 
 USE_CREDIT = False
-NUM_CREDIT_TYPES = 5
 CREDIT_MAPPING = {"barely-true": 0, 
                   "false": 1, 
                   "half-true": 2, 
-                  "mostly-true": 3, 
+                  "mostly-true": 3,
                   "pants-fire": 4}
+NUM_CREDIT_TYPES = len(CREDIT_MAPPING)
 
+USE_POS = False
+POS_TAG_SET = {
+    'PRP$': 0, 'VBG': 1, 'VBD': 2, '``': 3, 'VBN': 4,
+    ',': 5, "''": 6, 'VBP': 7, 'WDT': 8, 'JJ': 9,
+    'WP': 10, 'VBZ': 11, 'DT': 12, 'RP':13, '$': 14,
+    'NN': 15, ')': 16, '(': 17, 'FW': 18, 'POS': 19,
+    '.': 20, 'TO': 21, 'LS': 22, 'RB': 23, ':': 24,
+    'NNS': 25, 'NNP': 26, 'VB': 27, 'WRB': 28, 'CC': 29, 
+    'PDT': 30, 'RBS': 31, 'RBR': 32, 'CD': 33, 'PRP': 34,
+    'EX': 35, 'IN': 36, 'WP$': 37, 'MD': 38, 'NNPS': 39,
+    '--': 40, 'JJS': 41, 'JJR': 42, 'SYM': 43, 'UH': 44,
+    '#': 45
+    }
+POS_TAG_SET_LENGTH = len(POS_TAG_SET)
+
+# buffer
+# buffer
+# buffer

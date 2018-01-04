@@ -9,11 +9,12 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 from keras.utils.np_utils import to_categorical
 
-from parse_data import clean_credit, get_glove_vectors, get_data, get_mapping, get_one_hot_vectors, normalize_vectors
+from parse_data import clean_credit, get_glove_vectors, get_data, get_mapping, get_one_hot_vectors, normalize_vectors, get_pos_freqs 
 from cnn_models import cnn_model, cnn_model_with_subject, cnn_model_with_party, cnn_model_with_credit, cnn_model_with_all
 from bi_lstm_models import bi_lstm_model, bi_lstm_model_with_subject, bi_lstm_model_with_party, bi_lstm_model_with_credit, bi_lstm_model_with_all
 from bi_lstm_cnn_models import bi_lstm_cnn_model, bi_lstm_cnn_model_with_subject, bi_lstm_cnn_model_with_party, bi_lstm_cnn_model_with_credit, bi_lstm_cnn_model_with_all
 from cnn_bi_lstm_models import cnn_bi_lstm_model, cnn_bi_lstm_model_with_subject, cnn_bi_lstm_model_with_party, cnn_bi_lstm_model_with_credit, cnn_bi_lstm_model_with_all
+from parallel_cnn_bi_lstm_models import parallel_cnn_bi_lstm_model, parallel_cnn_bi_lstm_model_with_subject, parallel_cnn_bi_lstm_model_with_credit, parallel_cnn_bi_lstm_model_with_party, parallel_cnn_bi_lstm_model_with_all
 import var
 
 def train_model():
@@ -44,10 +45,12 @@ def train_model():
 
     x_train = pad_sequences(train_sequences, maxlen=var.MAX_SEQUENCE_LENGTH)
     x_val = pad_sequences(val_sequences, maxlen=var.MAX_SEQUENCE_LENGTH)
-
-    # Convert labels to categorical variables
     y_train = to_categorical(np.asarray([var.LABEL_MAPPING[label] for label in train_labels]))
     y_val = to_categorical(np.asarray([var.LABEL_MAPPING[label] for label in val_labels]))
+
+    # Get the Part of Speech frequencies
+    train_pos = get_pos_freqs(train_sentences)
+    val_pos = get_pos_freqs(val_sentences)
 
     # Populate SUBJECT_MAPPING with freq information from training data
     var.SUBJECT_MAPPING = get_mapping(train_subjects)
@@ -153,6 +156,21 @@ def train_model():
                 model = cnn_bi_lstm_model_with_credit(embedding_matrix, num_words)
             else:
                 model = cnn_bi_lstm_model(embedding_matrix, num_words)
+        elif var.MODEL_TYPE == "PARALLEL":
+            if var.USE_SUBJECTS and var.USE_PARTY and var.USE_CREDIT:
+                print("  Using all subject, party, credit metadata")
+                model = parallel_cnn_bi_lstm_model_with_all(embedding_matrix, num_words)
+            elif var.USE_SUBJECTS:
+                print("  Using Subject Metadata")
+                model = parallel_cnn_bi_lstm_model_with_subject(embedding_matrix, num_words)
+            elif var.USE_PARTY:
+                print("  Using Party Metadata")
+                model = parallel_cnn_bi_lstm_model_with_party(embedding_matrix, num_words)
+            elif var.USE_CREDIT:
+                print("  Using Credit Metadata")
+                model = parallel_cnn_bi_lstm_model_with_credit(embedding_matrix, num_words)
+            else:
+                model = parallel_cnn_bi_lstm_model(embedding_matrix, num_words)
         else:
             raise Exception("Invalid MODEL_TYPE")
         print("--- DONE ---")
