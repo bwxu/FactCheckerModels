@@ -1,4 +1,3 @@
-from __future__ import print_function
 import os
 import numpy as np
 from shutil import copyfile
@@ -10,7 +9,7 @@ from keras.preprocessing.text import Tokenizer
 from keras.utils.np_utils import to_categorical
 
 from parse_data import clean_credit, get_glove_vectors, get_data, get_mapping, get_one_hot_vectors, normalize_vectors, get_pos_freqs 
-from cnn_models import cnn_model, cnn_model_with_subject, cnn_model_with_party, cnn_model_with_credit, cnn_model_with_all
+from definitions_of_models import cnn_model
 from bi_lstm_models import bi_lstm_model, bi_lstm_model_with_subject, bi_lstm_model_with_party, bi_lstm_model_with_credit, bi_lstm_model_with_all
 from bi_lstm_cnn_models import bi_lstm_cnn_model, bi_lstm_cnn_model_with_subject, bi_lstm_cnn_model_with_party, bi_lstm_cnn_model_with_credit, bi_lstm_cnn_model_with_all
 from cnn_bi_lstm_models import cnn_bi_lstm_model, cnn_bi_lstm_model_with_subject, cnn_bi_lstm_model_with_party, cnn_bi_lstm_model_with_credit, cnn_bi_lstm_model_with_all
@@ -97,20 +96,9 @@ def train_model():
     for i in range(var.NUM_MODELS):
         print("Creating model " + str(i + 1) + " out of " + str(var.NUM_MODELS) + " ...")
         if var.MODEL_TYPE == "CNN":
-            if var.USE_SUBJECTS and var.USE_PARTY and var.USE_CREDIT:
-                print("  Using all subject, party, credit metadata")
-                model = cnn_model_with_all(embedding_matrix, num_words, pooling=var.POOLING)
-            elif var.USE_SUBJECTS:
-                print("  Using Subject Metadata")
-                model = cnn_model_with_subject(embedding_matrix, num_words, pooling=var.POOLING)
-            elif var.USE_PARTY:
-                print("  Using Party Metadata")
-                model = cnn_model_with_party(embedding_matrix, num_words, pooling=var.POOLING)
-            elif var.USE_CREDIT:
-                print("  Using Credit Metadata")
-                model = cnn_model_with_credit(embedding_matrix, num_words, pooling=var.POOLING)
-            else:
-                model = cnn_model(embedding_matrix, num_words, pooling=var.POOLING)
+            model = cnn_model(embedding_matrix, num_words, pooling=var.POOLING,
+                              subject=var.USE_SUBJECTS, party=var.USE_PARTY,
+                              credit=var.USE_CREDIT, pos=var.USE_POS)
         elif var.MODEL_TYPE == "BI_LSTM":
             if var.USE_SUBJECTS and var.USE_PARTY and var.USE_CREDIT:
                 print("  Using all subject, party, credit metadata")
@@ -181,23 +169,24 @@ def train_model():
         checkpoint_file = os.path.join(var.FOLDER_NAME, str(i).zfill(2) + var.FILE_NAME)
         checkpoint = ModelCheckpoint(checkpoint_file, monitor='val_loss', verbose=1, save_best_only=True)
         callbacks = [checkpoint]
+
+        train_input = [x_train]
+        val_input = [x_val]
+        if var.USE_SUBJECTS:
+            train_input.append(x_train_subject)
+            val_input.append(x_val_subject)
+        if var.USE_PARTY:
+            train_input.append(x_train_party)
+            val_input.append(x_val_party)
+        if var.USE_CREDIT:
+            train_input.append(x_train_credit)
+            val_input.append(x_val_credit)
         
-        if var.USE_SUBJECTS and var.USE_PARTY and var.USE_CREDIT:
-            model.fit([x_train, x_train_subject, x_train_party, x_train_credit], y_train,
-                       validation_data=([x_val, x_val_subject, x_val_party, x_val_credit], y_val),
-                       epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
-        elif var.USE_SUBJECTS:
-            model.fit([x_train, x_train_subject], y_train, validation_data=([x_val, x_val_subject], y_val),
-                      epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
-        elif var.USE_PARTY:
-            model.fit([x_train, x_train_party], y_train, validation_data=([x_val, x_val_party], y_val), 
-                      epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
-        elif var.USE_CREDIT:
-            model.fit([x_train, x_train_credit], y_train, validation_data=([x_val, x_val_credit], y_val), 
-                      epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
-        else:
-            model.fit(x_train, y_train, validation_data=(x_val, y_val),
-                      epochs=var.NUM_EPOCHS, batch_size=var.BATCH_SIZE, callbacks=callbacks)
+        model.fit(train_input, y_train,
+                  validation_data=(val_input, y_val),
+                  epochs=var.NUM_EPOCHS,
+                  batch_size=var.BATCH_SIZE,
+                  callbacks=callbacks)
         print("--- DONE ---")
 
         model.summary()

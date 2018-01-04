@@ -69,22 +69,20 @@ def test_model():
         x_test_credit = np.asarray(normalize_vectors(test_credit))
         x_val_credit = np.asarray(normalize_vectors(val_credit))
 
-        # Get the subject vectors if necessary
-        if var.USE_SUBJECTS and var.USE_PARTY and var.USE_CREDIT:
-            test_score = model.evaluate([x_test, x_test_subjects, x_test_party, x_test_credit], y_test, batch_size=var.BATCH_SIZE)
-            val_score = model.evaluate([x_val, x_val_subjects, x_val_party, x_val_credit], y_val, batch_size=var.BATCH_SIZE)
-        elif var.USE_SUBJECTS:
-            test_score = model.evaluate([x_test, x_test_subjects], y_test, batch_size=var.BATCH_SIZE)
-            val_score = model.evaluate([x_val, x_val_subjects], y_val, batch_size=var.BATCH_SIZE)
-        elif var.USE_PARTY:
-            test_score = model.evaluate([x_test, x_test_party], y_test, batch_size=var.BATCH_SIZE)
-            val_score = model.evaluate([x_val, x_val_party], y_val, batch_size=var.BATCH_SIZE)
-        elif var.USE_CREDIT:
-            test_score = model.evaluate([x_test, x_test_credit], y_test, batch_size=var.BATCH_SIZE)
-            val_score = model.evaluate([x_val, x_val_credit], y_val, batch_size=var.BATCH_SIZE)
-        else:
-            test_score = model.evaluate(x_test, y_test, batch_size=var.BATCH_SIZE)
-            val_score = model.evaluate(x_val, y_val, batch_size=var.BATCH_SIZE)
+        test_input = [x_test]
+        val_input = [x_val]
+        if var.USE_SUBJECTS:
+            test_input.append(x_test_subjects)
+            val_input.append(x_val_subjects)
+        if var.USE_PARTY:
+            test_input.append(x_test_party)
+            val_input.append(x_val_party)
+        if var.USE_CREDIT:
+            test_input.append(x_test_credit)
+            val_input.append(x_val_credit)
+
+        test_score = model.evaluate(test_input, y_test, batch_size=var.BATCH_SIZE)
+        val_score = model.evaluate(val_input, y_val, batch_size=var.BATCH_SIZE)
 
         print()
         print("model = " + str(path))

@@ -117,7 +117,6 @@ def clean_credit(labels, credit):
 def get_pos_freqs(sentences):
     # gets the part of speech frequency from each sentence using nltk pos_tag
     # returns a list of pos frequencies for each sentence
-    print(var.POS_TAG_SET)
     vector_list = []
     for sentence in sentences:
         tokens = nltk.tokenize.word_tokenize(sentence)
@@ -126,6 +125,5 @@ def get_pos_freqs(sentences):
         for tag in tagged:
             vector[var.POS_TAG_SET[tag[1]]] += 1
         vector_list.append(vector)
-    print(vector_list)
     return vector_list
 

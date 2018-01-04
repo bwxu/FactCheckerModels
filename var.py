@@ -1,3 +1,9 @@
+# Choice of metadata
+USE_SUBJECTS = True
+USE_PARTY = True
+USE_CREDIT = True
+USE_POS = False
+
 # Location of data files
 USE_WORD2VEC = False
 WORD2VEC_BIN_PATH = "data/GoogleNews-vectors-negative300.bin"
@@ -7,7 +13,7 @@ VALIDATION_DATA_PATH = "data/valid.tsv"
 TEST_DATA_PATH = "data/test.tsv"
 
 # CNN, BI_LSTM, BI_LSTM_CNN, CNN_BI_LSTM, PARALLEL
-MODEL_TYPE = "PARALLEL"
+MODEL_TYPE = "CNN"
 
 NUM_MODELS = 10
 
@@ -42,19 +48,16 @@ NUM_EPOCHS = 10
 BATCH_SIZE = 64
 
 # Parameters for saving the trained model
-FOLDER_NAME = "models/parallel/all"
+FOLDER_NAME = "models/test/cnn_flex"
 # FILE_NAME = "new-epoch-{epoch:02d}-val_loss-{val_loss:.4f}.hdf5"
 FILE_NAME = '_lowest_val_loss.hdf5'
 
-USE_SUBJECTS = False
 NUM_SUBJECTS = 30
 SUBJECT_MAPPING = {}
 
-USE_PARTY = False
 NUM_PARTIES = 10
 PARTY_MAPPING = {}
 
-USE_CREDIT = False
 CREDIT_MAPPING = {"barely-true": 0, 
                   "false": 1, 
                   "half-true": 2, 
@@ -62,7 +65,6 @@ CREDIT_MAPPING = {"barely-true": 0,
                   "pants-fire": 4}
 NUM_CREDIT_TYPES = len(CREDIT_MAPPING)
 
-USE_POS = False
 POS_TAG_SET = {
     'PRP$': 0, 'VBG': 1, 'VBD': 2, '``': 3, 'VBN': 4,
     ',': 5, "''": 6, 'VBP': 7, 'WDT': 8, 'JJ': 9,
