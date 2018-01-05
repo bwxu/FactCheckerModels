@@ -9,10 +9,7 @@ from keras.preprocessing.text import Tokenizer
 from keras.utils.np_utils import to_categorical
 
 from parse_data import clean_credit, get_glove_vectors, get_data, get_mapping, get_one_hot_vectors, normalize_vectors, get_pos_freqs 
-from definitions_of_models import cnn_model, bi_lstm_model
-from bi_lstm_cnn_models import bi_lstm_cnn_model, bi_lstm_cnn_model_with_subject, bi_lstm_cnn_model_with_party, bi_lstm_cnn_model_with_credit, bi_lstm_cnn_model_with_all
-from cnn_bi_lstm_models import cnn_bi_lstm_model, cnn_bi_lstm_model_with_subject, cnn_bi_lstm_model_with_party, cnn_bi_lstm_model_with_credit, cnn_bi_lstm_model_with_all
-from parallel_cnn_bi_lstm_models import parallel_cnn_bi_lstm_model, parallel_cnn_bi_lstm_model_with_subject, parallel_cnn_bi_lstm_model_with_credit, parallel_cnn_bi_lstm_model_with_party, parallel_cnn_bi_lstm_model_with_all
+from definitions_of_models import cnn_model, bi_lstm_model, bi_lstm_cnn_model, cnn_bi_lstm_model, parallel_cnn_bi_lstm_model
 import var
 
 def train_model():
@@ -103,50 +100,17 @@ def train_model():
                                   subject=var.USE_SUBJECTS, party=var.USE_PARTY,
                                   credit=var.USE_CREDIT, pos=var.USE_POS)
         elif var.MODEL_TYPE == "BI_LSTM_CNN":
-            if var.USE_SUBJECTS and var.USE_PARTY and var.USE_CREDIT:
-                print("  Using all subject, party, credit metadata")
-                model = bi_lstm_cnn_model_with_all(embedding_matrix, num_words, var.POOLING)
-            elif var.USE_SUBJECTS:
-                print("  Using Subject Metadata")
-                model = bi_lstm_cnn_model_with_subject(embedding_matrix, num_words, var.POOLING)
-            elif var.USE_PARTY:
-                print("  Using Party Metadata")
-                model = bi_lstm_cnn_model_with_party(embedding_matrix, num_words, var.POOLING)
-            elif var.USE_CREDIT:
-                print("  Using Credit Metadata")
-                model = bi_lstm_cnn_model_with_credit(embedding_matrix, num_words, var.POOLING)
-            else:
-                model = bi_lstm_cnn_model(embedding_matrix, num_words, var.POOLING)
+            model = bi_lstm_cnn_model(embedding_matrix, num_words, pooling=var.POOLING,
+                                      subject=var.USE_SUBJECTS, party=var.USE_PARTY,
+                                      credit=var.USE_CREDIT, pos=var.USE_POS)
         elif var.MODEL_TYPE == "CNN_BI_LSTM":
-            if var.USE_SUBJECTS and var.USE_PARTY and var.USE_CREDIT:
-                print("  Using all subject, party, credit metadata")
-                model = cnn_bi_lstm_model_with_all(embedding_matrix, num_words)
-            elif var.USE_SUBJECTS:
-                print("  Using Subject Metadata")
-                model = cnn_bi_lstm_model_with_subject(embedding_matrix, num_words)
-            elif var.USE_PARTY:
-                print("  Using Party Metadata")
-                model = cnn_bi_lstm_model_with_party(embedding_matrix, num_words)
-            elif var.USE_CREDIT:
-                print("  Using Credit Metadata")
-                model = cnn_bi_lstm_model_with_credit(embedding_matrix, num_words)
-            else:
-                model = cnn_bi_lstm_model(embedding_matrix, num_words)
+            model = cnn_bi_lstm_model(embedding_matrix, num_words,
+                                      subject=var.USE_SUBJECTS, party=var.USE_PARTY,
+                                      credit=var.USE_CREDIT, pos=var.USE_POS)
         elif var.MODEL_TYPE == "PARALLEL":
-            if var.USE_SUBJECTS and var.USE_PARTY and var.USE_CREDIT:
-                print("  Using all subject, party, credit metadata")
-                model = parallel_cnn_bi_lstm_model_with_all(embedding_matrix, num_words)
-            elif var.USE_SUBJECTS:
-                print("  Using Subject Metadata")
-                model = parallel_cnn_bi_lstm_model_with_subject(embedding_matrix, num_words)
-            elif var.USE_PARTY:
-                print("  Using Party Metadata")
-                model = parallel_cnn_bi_lstm_model_with_party(embedding_matrix, num_words)
-            elif var.USE_CREDIT:
-                print("  Using Credit Metadata")
-                model = parallel_cnn_bi_lstm_model_with_credit(embedding_matrix, num_words)
-            else:
-                model = parallel_cnn_bi_lstm_model(embedding_matrix, num_words)
+            model = parallel_cnn_bi_lstm_model(embedding_matrix, num_words, pooling=var.POOLING,
+                                               subject=var.USE_SUBJECTS, party=var.USE_PARTY,
+                                               credit=var.USE_CREDIT, pos=var.USE_POS)
         else:
             raise Exception("Invalid MODEL_TYPE")
         print("--- DONE ---")
