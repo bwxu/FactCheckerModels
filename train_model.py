@@ -44,8 +44,8 @@ def train_model():
     y_val = to_categorical(np.asarray([var.LABEL_MAPPING[label] for label in val_labels]))
 
     # Get the Part of Speech frequencies
-    train_pos = get_pos_freqs(train_sentences)
-    val_pos = get_pos_freqs(val_sentences)
+    x_train_pos = np.asarray(get_pos_freqs(train_sentences))
+    x_val_pos = np.asarray(get_pos_freqs(val_sentences))
 
     # Populate SUBJECT_MAPPING with freq information from training data
     var.SUBJECT_MAPPING = get_mapping(train_subjects)
@@ -133,6 +133,9 @@ def train_model():
         if var.USE_CREDIT:
             train_input.append(x_train_credit)
             val_input.append(x_val_credit)
+        if var.USE_POS:
+            train_input.append(x_train_pos)
+            val_input.append(x_val_pos)
         
         model.fit(train_input, y_train,
                   validation_data=(val_input, y_val),

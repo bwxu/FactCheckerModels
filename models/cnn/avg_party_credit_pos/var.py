@@ -1,5 +1,5 @@
 # Choice of metadata
-USE_SUBJECTS = True
+USE_SUBJECTS = False
 USE_PARTY = True
 USE_CREDIT = True
 USE_POS = True

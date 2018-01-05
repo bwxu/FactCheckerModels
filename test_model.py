@@ -8,7 +8,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 from keras.utils.np_utils import to_categorical
 
-from parse_data import get_data, get_mapping, get_one_hot_vectors, normalize_vectors, clean_credit 
+from parse_data import get_data, get_mapping, get_one_hot_vectors, normalize_vectors, clean_credit, get_pos_freqs
 
 import var
 
@@ -56,6 +56,9 @@ def test_model():
         x_test = pad_sequences(test_sequences, maxlen=var.MAX_SEQUENCE_LENGTH)
         y_test = to_categorical(np.asarray([var.LABEL_MAPPING[label] for label in test_labels]))
         
+        x_test_pos = np.asarray(get_pos_freqs(test_sentences))
+        x_val_pos = np.asarray(get_pos_freqs(val_sentences))
+
         var.SUBJECT_MAPPING = get_mapping(train_subjects)
         x_test_subjects = np.asarray(get_one_hot_vectors(test_subjects, var.NUM_SUBJECTS, var.SUBJECT_MAPPING))
         x_val_subjects = np.asarray(get_one_hot_vectors(val_subjects, var.NUM_SUBJECTS, var.SUBJECT_MAPPING))
@@ -80,6 +83,9 @@ def test_model():
         if var.USE_CREDIT:
             test_input.append(x_test_credit)
             val_input.append(x_val_credit)
+        if var.USE_POS:
+            test_input.append(x_test_pos)
+            val_input.append(x_val_pos)
 
         test_score = model.evaluate(test_input, y_test, batch_size=var.BATCH_SIZE)
         val_score = model.evaluate(val_input, y_val, batch_size=var.BATCH_SIZE)

@@ -1,5 +1,5 @@
 # Choice of metadata
-USE_SUBJECTS = True
+USE_SUBJECTS = False
 USE_PARTY = True
 USE_CREDIT = True
 USE_POS = True
@@ -48,7 +48,7 @@ NUM_EPOCHS = 10
 BATCH_SIZE = 64
 
 # Parameters for saving the trained model
-FOLDER_NAME = "models/cnn/avg_all_pos"
+FOLDER_NAME = "models/cnn/avg_party_credit"
 # FILE_NAME = "new-epoch-{epoch:02d}-val_loss-{val_loss:.4f}.hdf5"
 FILE_NAME = '_lowest_val_loss.hdf5'
 

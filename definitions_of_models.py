@@ -48,6 +48,11 @@ def add_aux_metadata(in_list, out_list, subject=False, party=False, credit=False
         aux_in_credit = Input(shape=(var.NUM_CREDIT_TYPES,), dtype='float32', name='aux_in_credit')
         in_list.append(aux_in_credit)
         out_list.append(aux_in_credit)
+    if pos:
+        print("Using Part of Speech Metadata")
+        aux_in_pos = Input(shape=(var.POS_TAG_SET_LENGTH,), dtype='float32', name='aux_in_pos')
+        in_list.append(aux_in_pos)
+        out_list.append(aux_in_pos)
 
 
 def cnn_model(embedding_matrix, num_words, pooling="MAX", subject=False, party=False, credit=False, pos=False):
