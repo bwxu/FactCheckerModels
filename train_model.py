@@ -8,7 +8,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 from keras.utils.np_utils import to_categorical
 
-from parse_data import clean_credit, get_glove_vectors, get_data, get_mapping, get_one_hot_vectors, normalize_vectors, get_pos_freqs 
+from parse_data import clean_credit, get_glove_vectors, get_data, get_mapping, get_one_hot_vectors, normalize_vectors, get_pos_freqs, remove_stop_words
 from definitions_of_models import cnn_model, bi_lstm_model, bi_lstm_cnn_model, cnn_bi_lstm_model, parallel_cnn_bi_lstm_model
 import var
 
@@ -27,10 +27,14 @@ def train_model():
     train_labels, train_sentences, train_subjects, train_party, train_credit = get_data(var.TRAINING_DATA_PATH)
     val_labels, val_sentences, val_subjects, val_party, val_credit = get_data(var.VALIDATION_DATA_PATH)
     print("--- DONE ---")
+    
+    if var.NO_STOP_WORDS:    
+        train_sentences = remove_stop_words(train_sentences)
+        val_sentences = remove_stop_words(val_sentences)
 
     print("Preparing data for model... ")
-    # Convert the input sentences into sequences of integers length 100 where
-    # each integer maps to a word and the sequence only considers the first 100
+    # Convert the input sentences into sequences of integers length MAX_SEQUENCE_LENGTH where
+    # each integer maps to a word and the sequence only considers the first MAX_SEQUENCE_LENGTH
     # words in the statement being evaluated
     tokenizer = Tokenizer(num_words=var.MAX_NUM_WORDS)
     tokenizer.fit_on_texts(train_sentences)

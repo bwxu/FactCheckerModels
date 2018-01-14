@@ -7,6 +7,9 @@ import numpy as np
 import var
 import nltk
 
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
 def get_glove_vectors(path):
     # Given a glove embeddings txt file, parse the file into a dictionary where every key 
     # in the dictionary is a word and the value is the word vector associated with the word
@@ -126,4 +129,11 @@ def get_pos_freqs(sentences):
             vector[var.POS_TAG_SET[tag[1]]] += 1
         vector_list.append(vector)
     return vector_list
+
+def remove_stop_words(sentences):
+    stops = set(stopwords.words('english'))
+    sentences = [word_tokenize(sentence) for sentence in sentences]
+    sentences = [[word for word in sentence if word not in stops] for sentence in sentences]
+    sentences = [' '.join(word for word in sentence) for sentence in sentences]
+    return sentences
 

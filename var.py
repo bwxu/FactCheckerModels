@@ -1,8 +1,10 @@
 # Choice of metadata
-USE_SUBJECTS = True
-USE_PARTY = True
-USE_CREDIT = True
-USE_POS = True
+USE_SUBJECTS = False
+USE_PARTY = False
+USE_CREDIT = False
+USE_POS = False
+
+NO_STOP_WORDS = False
 
 # Location of data files
 USE_WORD2VEC = False
@@ -30,7 +32,7 @@ LABEL_MAPPING = {"pants-fire": 0,
                  "mostly-true": 4,
                  "true": 5}
 MAX_NUM_WORDS = 20000
-MAX_SEQUENCE_LENGTH = 67
+MAX_SEQUENCE_LENGTH = 65
 EMBEDDING_DIM = 300
 
 # Parameters for model construction
@@ -48,7 +50,7 @@ NUM_EPOCHS = 10
 BATCH_SIZE = 64
 
 # Parameters for saving the trained model
-FOLDER_NAME = "models/cnn/avg_all_pos"
+FOLDER_NAME = "models/cnn/len_65"
 # FILE_NAME = "new-epoch-{epoch:02d}-val_loss-{val_loss:.4f}.hdf5"
 FILE_NAME = '_lowest_val_loss.hdf5'
 

@@ -8,7 +8,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 from keras.utils.np_utils import to_categorical
 
-from parse_data import get_data, get_mapping, get_one_hot_vectors, normalize_vectors, clean_credit, get_pos_freqs
+from parse_data import get_data, get_mapping, get_one_hot_vectors, normalize_vectors, clean_credit, get_pos_freqs, remove_stop_words
 
 import var
 
@@ -38,12 +38,16 @@ def test_model():
 
         # Recreate the input tokenizer
         train_labels, train_sentences, train_subjects, train_party, train_credit = get_data(var.TRAINING_DATA_PATH)
+        if var.NO_STOP_WORDS:
+            train_sentences = remove_stop_words(train_sentences)
         train_party = [[party] for party in train_party]
         tokenizer = Tokenizer(num_words=var.MAX_NUM_WORDS)
         tokenizer.fit_on_texts(train_sentences)
 
         # Get the val input via tokenizer and val labels
         val_labels, val_sentences, val_subjects, val_party, val_credit = get_data(var.VALIDATION_DATA_PATH)
+        if var.NO_STOP_WORDS:
+            val_sentences = remove_stop_words(val_sentences)
         val_party = [[party] for party in val_party]
         val_sequences = tokenizer.texts_to_sequences(val_sentences)
         x_val = pad_sequences(val_sequences, maxlen=var.MAX_SEQUENCE_LENGTH)
@@ -51,6 +55,8 @@ def test_model():
         
         # Get the test input via tokenizer and test labels
         test_labels, test_sentences, test_subjects, test_party, test_credit = get_data(var.TEST_DATA_PATH)
+        if var.NO_STOP_WORDS:
+            test_sentences = remove_stop_words(test_sentences)
         test_party = [[party] for party in test_party]
         test_sequences = tokenizer.texts_to_sequences(test_sentences)
         x_test = pad_sequences(test_sequences, maxlen=var.MAX_SEQUENCE_LENGTH)
