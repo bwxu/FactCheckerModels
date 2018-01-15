@@ -1,13 +1,13 @@
 # Choice of metadata
-USE_SUBJECTS = True
-USE_PARTY = True
-USE_CREDIT = True
+USE_SUBJECTS = False
+USE_PARTY = False
+USE_CREDIT = False
 USE_POS = False
 
 NO_STOP_WORDS = False
 
 # Location of data files
-USE_WORD2VEC = True
+USE_WORD2VEC = False
 WORD2VEC_BIN_PATH = "data/GoogleNews-vectors-negative300.bin"
 GLOVE_VECTOR_PATH = "data/glove.840B.300d.txt"
 TRAINING_DATA_PATH = "data/train.tsv"
@@ -15,7 +15,7 @@ VALIDATION_DATA_PATH = "data/valid.tsv"
 TEST_DATA_PATH = "data/test.tsv"
 
 # CNN, BI_LSTM, BI_LSTM_CNN, CNN_BI_LSTM, PARALLEL
-MODEL_TYPE = "BI_LSTM_CNN"
+MODEL_TYPE = "CNN"
 
 NUM_MODELS = 10
 
@@ -50,7 +50,7 @@ NUM_EPOCHS = 10
 BATCH_SIZE = 64
 
 # Parameters for saving the trained model
-FOLDER_NAME = "models/cnn/test"
+FOLDER_NAME = "models/cnn/no_embed_training"
 # FILE_NAME = "new-epoch-{epoch:02d}-val_loss-{val_loss:.4f}.hdf5"
 FILE_NAME = '_lowest_val_loss.hdf5'
 

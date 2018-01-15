@@ -1,7 +1,7 @@
 # Choice of metadata
-USE_SUBJECTS = True
-USE_PARTY = True
-USE_CREDIT = True
+USE_SUBJECTS = False
+USE_PARTY = False
+USE_CREDIT = False
 USE_POS = False
 
 NO_STOP_WORDS = False
@@ -15,11 +15,11 @@ VALIDATION_DATA_PATH = "data/valid.tsv"
 TEST_DATA_PATH = "data/test.tsv"
 
 # CNN, BI_LSTM, BI_LSTM_CNN, CNN_BI_LSTM, PARALLEL
-MODEL_TYPE = "BI_LSTM_CNN"
+MODEL_TYPE = "CNN"
 
 NUM_MODELS = 10
 
-HIDDEN_LAYER_SIZE = 100
+HIDDEN_LAYER_SIZE = 10
 
 LSTM_OUT_DIM = 64
 LSTM_DROPOUT = 0.4
@@ -50,7 +50,7 @@ NUM_EPOCHS = 10
 BATCH_SIZE = 64
 
 # Parameters for saving the trained model
-FOLDER_NAME = "models/cnn/test"
+FOLDER_NAME = "models/cnn/multilayer"
 # FILE_NAME = "new-epoch-{epoch:02d}-val_loss-{val_loss:.4f}.hdf5"
 FILE_NAME = '_lowest_val_loss.hdf5'
 

@@ -8,7 +8,7 @@ import var
 import nltk
 
 from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
+from nltk.tokenize import RegexpTokenizer, word_tokenize
 
 def get_glove_vectors(path):
     # Given a glove embeddings txt file, parse the file into a dictionary where every key 
@@ -136,4 +136,7 @@ def remove_stop_words(sentences):
     sentences = [[word for word in sentence if word not in stops] for sentence in sentences]
     sentences = [' '.join(word for word in sentence) for sentence in sentences]
     return sentences
+
+def get_bow_rep(sentences):
+    tokenizer = RegexpTokenizer(r'\w+')
 

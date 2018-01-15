@@ -31,6 +31,7 @@ def conv_layer(pooling="MAX", input_dimension=var.EMBEDDING_DIM):
     conv_output = concat(conv_list)
     return Model(inputs=input_node, outputs=conv_output)
 
+
 def add_aux_metadata(in_list, out_list, subject=False, party=False, credit=False, pos=False):
      # Create auxiliary metadata models
     if subject:
