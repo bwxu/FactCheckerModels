@@ -1,10 +1,23 @@
-# Choice of metadata
+# Metadata Selection
+# NOTE: When testing, the parameters in this section must be the same as training
 USE_SUBJECTS = True
 USE_PARTY = True
 USE_CREDIT = True
 USE_POS = False
 
 NO_STOP_WORDS = False
+
+# Model Selection
+# NOTE: When testing, the parameters in this section must be the same as training
+# CNN, BI_LSTM, BI_LSTM_CNN, CNN_BI_LSTM, PARALLEL
+MODEL_TYPE = "PARALLEL"
+
+NUM_MODELS = 10
+
+HIDDEN_LAYER_SIZE = 100
+
+LSTM_OUT_DIM = 64
+LSTM_DROPOUT = 0.4
 
 # Location of data files
 USE_WORD2VEC = True
@@ -13,16 +26,6 @@ GLOVE_VECTOR_PATH = "data/glove.840B.300d.txt"
 TRAINING_DATA_PATH = "data/train.tsv"
 VALIDATION_DATA_PATH = "data/valid.tsv"
 TEST_DATA_PATH = "data/test.tsv"
-
-# CNN, BI_LSTM, BI_LSTM_CNN, CNN_BI_LSTM, PARALLEL
-MODEL_TYPE = "BI_LSTM_CNN"
-
-NUM_MODELS = 10
-
-HIDDEN_LAYER_SIZE = 100
-
-LSTM_OUT_DIM = 64
-LSTM_DROPOUT = 0.4
 
 # Arguments for preparing sentences, labels, and embedding matrix
 LABEL_MAPPING = {"pants-fire": 0, 
@@ -50,9 +53,8 @@ NUM_EPOCHS = 10
 BATCH_SIZE = 64
 
 # Parameters for saving the trained model
-FOLDER_NAME = "models/cnn/test"
-# FILE_NAME = "new-epoch-{epoch:02d}-val_loss-{val_loss:.4f}.hdf5"
-FILE_NAME = '_lowest_val_loss.hdf5'
+FOLDER_NAME = "models/test"
+FILE_NAME = 'lowest_val_loss.hdf5'
 
 NUM_SUBJECTS = 30
 SUBJECT_MAPPING = {}
@@ -81,6 +83,3 @@ POS_TAG_SET = {
     }
 POS_TAG_SET_LENGTH = len(POS_TAG_SET)
 
-# buffer
-# buffer
-# buffer

@@ -122,7 +122,7 @@ def train_model():
         print("Training model... ")
         # Save trained model after each epoch
 
-        checkpoint_file = os.path.join(var.FOLDER_NAME, str(i).zfill(2) + var.FILE_NAME)
+        checkpoint_file = os.path.join(var.FOLDER_NAME, str(i).zfill(2) + '_' + var.FILE_NAME)
         checkpoint = ModelCheckpoint(checkpoint_file, monitor='val_loss', verbose=1, save_best_only=True)
         callbacks = [checkpoint]
 
@@ -140,6 +140,8 @@ def train_model():
         if var.USE_POS:
             train_input.append(x_train_pos)
             val_input.append(x_val_pos)
+
+        print("train_input_size", len(train_input))
         
         model.fit(train_input, y_train,
                   validation_data=(val_input, y_val),

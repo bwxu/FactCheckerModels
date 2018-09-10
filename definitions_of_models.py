@@ -1,3 +1,9 @@
+'''
+definitions_of_models.py
+
+This file contains many tensorflow model archietectures for extracting features from sentences.
+'''
+
 from keras.layers import Activation, AveragePooling1D, Bidirectional, Concatenate, Conv1D, Dense, Dropout, Embedding, Flatten, Input, LSTM, MaxPooling1D, Permute
 from keras.models import Model, Sequential
 from keras.optimizers import SGD, Adam
@@ -55,7 +61,6 @@ def add_aux_metadata(in_list, out_list, subject=False, party=False, credit=False
         in_list.append(aux_in_pos)
         out_list.append(aux_in_pos)
 
-
 def cnn_model(embedding_matrix, num_words, pooling="MAX", subject=False, party=False, credit=False, pos=False):
     # Maintain lists of model inputs and outputs
     # Create main embedding model
@@ -78,19 +83,15 @@ def cnn_model(embedding_matrix, num_words, pooling="MAX", subject=False, party=F
         combined_out = Concatenate()(out_list)
     else:
         combined_out = out_list
-    combined_layer = Model(inputs=in_list, outputs=combined_out)
-    
-    # Model Definition
-    model = Sequential()
-    model.add(combined_layer)
-    model.add(Dense(var.HIDDEN_LAYER_SIZE))
-    model.add(Dropout(rate=var.DROPOUT_PROB))
-    model.add(Activation('relu'))
-    model.add(Dense(len(var.LABEL_MAPPING), activation='softmax'))
+
+    hidden = Dense(var.HIDDEN_LAYER_SIZE, activation='relu')(combined_out)
+    hidden = Dropout(rate=var.DROPOUT_PROB)(hidden)
+    predictions = Dense(len(var.LABEL_MAPPING), activation='softmax')(hidden)
+    model = Model(inputs=in_list, outputs=predictions)
     model.compile(loss='categorical_crossentropy',
                   optimizer=Adam(),
                   metrics=['acc'])
-   
+    
     return model
 
 def bi_lstm_model(embedding_matrix, num_words, subject=False, party=False, credit=False, pos=False):
@@ -118,15 +119,11 @@ def bi_lstm_model(embedding_matrix, num_words, subject=False, party=False, credi
         combined_out = Concatenate()(out_list)
     else:
         combined_out = out_list
-    combined_layer = Model(inputs=in_list, outputs=combined_out)
-   
-    # Model Definition
-    model = Sequential()
-    model.add(combined_layer)
-    model.add(Dense(var.HIDDEN_LAYER_SIZE))
-    model.add(Dropout(rate=var.DROPOUT_PROB))
-    model.add(Activation('relu'))
-    model.add(Dense(len(var.LABEL_MAPPING), activation='softmax'))
+
+    hidden = Dense(var.HIDDEN_LAYER_SIZE, activation='relu')(combined_out)
+    hidden = Dropout(rate=var.DROPOUT_PROB)(hidden)
+    predictions = Dense(len(var.LABEL_MAPPING), activation='softmax')(hidden)
+    model = Model(inputs=in_list, outputs=predictions)
     model.compile(loss='categorical_crossentropy',
                   optimizer=Adam(),
                   metrics=['acc'])
@@ -158,19 +155,15 @@ def bi_lstm_cnn_model(embedding_matrix, num_words, pooling="MAX", subject=False,
         combined_out = Concatenate()(out_list)
     else:
         combined_out = out_list
-    combined_layer = Model(inputs=in_list, outputs=combined_out)
-   
-    # Model Definition
-    model = Sequential()
-    model.add(combined_layer)
-    model.add(Dense(var.HIDDEN_LAYER_SIZE))
-    model.add(Dropout(rate=var.DROPOUT_PROB))
-    model.add(Activation('relu'))
-    model.add(Dense(len(var.LABEL_MAPPING), activation='softmax'))
+
+    hidden = Dense(var.HIDDEN_LAYER_SIZE, activation='relu')(combined_out)
+    hidden = Dropout(rate=var.DROPOUT_PROB)(hidden)
+    predictions = Dense(len(var.LABEL_MAPPING), activation='softmax')(hidden)
+    model = Model(inputs=in_list, outputs=predictions)
     model.compile(loss='categorical_crossentropy',
                   optimizer=Adam(),
                   metrics=['acc'])
-   
+    
     return model
 
 def cnn_bi_lstm_model(embedding_matrix, num_words, subject=False, party=False, credit=False, pos=False):
@@ -201,19 +194,15 @@ def cnn_bi_lstm_model(embedding_matrix, num_words, subject=False, party=False, c
         combined_out = Concatenate()(out_list)
     else:
         combined_out = out_list
-    combined_layer = Model(inputs=in_list, outputs=combined_out)
    
-    # Model Definition
-    model = Sequential()
-    model.add(combined_layer)
-    model.add(Dense(var.HIDDEN_LAYER_SIZE))
-    model.add(Dropout(rate=var.DROPOUT_PROB))
-    model.add(Activation('relu'))
-    model.add(Dense(len(var.LABEL_MAPPING), activation='softmax'))
+    hidden = Dense(var.HIDDEN_LAYER_SIZE, activation='relu')(combined_out)
+    hidden = Dropout(rate=var.DROPOUT_PROB)(hidden)
+    predictions = Dense(len(var.LABEL_MAPPING), activation='softmax')(hidden)
+    model = Model(inputs=in_list, outputs=predictions)
     model.compile(loss='categorical_crossentropy',
                   optimizer=Adam(),
                   metrics=['acc'])
-   
+  
     return model
 
 def parallel_cnn_bi_lstm_model(embedding_matrix, num_words, pooling="MAX", subject=False, party=False, credit=False, pos=False):
@@ -247,18 +236,14 @@ def parallel_cnn_bi_lstm_model(embedding_matrix, num_words, pooling="MAX", subje
         combined_out = Concatenate()(out_list)
     else:
         combined_out = out_list
-    combined_layer = Model(inputs=in_list, outputs=combined_out)
     
-    # Model Definition
-    model = Sequential()
-    model.add(combined_layer)
-    model.add(Dense(var.HIDDEN_LAYER_SIZE))
-    model.add(Dropout(rate=var.DROPOUT_PROB))
-    model.add(Activation('relu'))
-    model.add(Dense(len(var.LABEL_MAPPING), activation='softmax'))
+    hidden = Dense(var.HIDDEN_LAYER_SIZE, activation='relu')(combined_out)
+    hidden = Dropout(rate=var.DROPOUT_PROB)(hidden)
+    predictions = Dense(len(var.LABEL_MAPPING), activation='softmax')(hidden)
+    model = Model(inputs=in_list, outputs=predictions)
     model.compile(loss='categorical_crossentropy',
                   optimizer=Adam(),
                   metrics=['acc'])
-    
+  
     return model
 

@@ -5,6 +5,10 @@ import io
 import math
 import numpy as np
 import var
+import imp
+import sys
+sys.modules["sqlite"] = imp.new_module("sqlite")
+sys.modules["sqlite3.dbapi2"] = imp.new_module("sqlite.dbapi2")
 import nltk
 
 from nltk.corpus import stopwords
@@ -51,8 +55,8 @@ def get_input_data(path):
     # but you can use the following command to access the full verdict report and links to the source documents:
     # wget http://www.politifact.com//api/v/2/statement/[ID]/?format=json
     
-    with io.open(path, 'r', newline='', encoding='utf-8') as f:
-        f = (line.encode('utf-8') for line in f)
+    with open(path, 'r', newline='', encoding='utf-8') as f:
+        #f = (line.encode('utf-8') for line in f)
         reader = csv.reader(f, delimiter="\t", quotechar='"')
         data = [[index for index in row] for row in reader]
     return data
