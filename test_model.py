@@ -15,6 +15,8 @@ import var
 def test_model():
     # Load the trained model to test. Model path should be the first argument
     paths = None
+    if len(sys.argv) < 2:
+        raise Exception("Must specify the path to the folder of the saved model to test")
     model_path = sys.argv[1]
     folder = ''
 
