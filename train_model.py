@@ -14,9 +14,8 @@ from parse_data import clean_credit, get_glove_vectors, get_data, \
     get_mapping, get_one_hot_vectors, \
     normalize_vectors, get_pos_freqs, \
     remove_stop_words
-from definitions_of_models import cnn_model, bi_lstm_model,
-bi_lstm_cnn_model, cnn_bi_lstm_model, \
-    parallel_cnn_bi_lstm_model
+from definitions_of_models import cnn_model, bi_lstm_model, \
+    bi_lstm_cnn_model, cnn_bi_lstm_model, parallel_cnn_bi_lstm_model
 
 
 def train_model():
