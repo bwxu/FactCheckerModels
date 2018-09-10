@@ -1,10 +1,13 @@
 '''
 definitions_of_models.py
 
-This file contains many tensorflow model architectures for extracting features from sentences.
+This file contains many tensorflow model architectures for extracting features
+from sentences.
 '''
 
-from keras.layers import Activation, AveragePooling1D, Bidirectional, Concatenate, Conv1D, Dense, Dropout, Embedding, Flatten, Input, LSTM, MaxPooling1D, Permute
+from keras.layers import Activation, AveragePooling1D, Bidirectional, \
+                        Concatenate, Conv1D, Dense, Dropout, Embedding, \
+                        Flatten, Input, LSTM, MaxPooling1D, Permute
 from keras.models import Model, Sequential
 from keras.optimizers import SGD, Adam
 
@@ -12,25 +15,29 @@ import tensorflow as tf
 import numpy as np
 import var
 
+
 def conv_layer(pooling, input_dimension):
     '''
-    Generic convolutional layer. Applies relu activation along with user specified
-    filters, pooling type, and embedding dimensions.
+    Generic convolutional layer. Applies relu activation along with user
+    specified filters, pooling type, and embedding dimensions.
 
     Inputs:
       pooling: what kind of pooling to use (MAX, AVG, MAXOUT)
       input_dimension: dimension of input embeddings
-    
+
     Outputs:
       keras Model object representing a convolutional layer
     '''
     # Create the convolution layer which involves using different filter sizes
     input_node = Input(shape=(var.MAX_SEQUENCE_LENGTH, input_dimension))
     conv_list = []
-    
+
     for index, filter_size in enumerate(var.FILTER_SIZE_LIST):
         num_filters = var.NUM_FILTERS[index]
-        conv = Conv1D(filters=num_filters, kernel_size=filter_size, activation='relu')(input_node)
+        conv = Conv1D(
+            filters=num_filters,
+            kernel_size=filter_size,
+            activation='relu')(input_node)
         if pooling == "MAX":
             pool = MaxPooling1D(pool_size=int(conv.shape[1]))(conv)
         elif pooling == "AVG":
@@ -40,18 +47,24 @@ def conv_layer(pooling, input_dimension):
             pool = MaxPooling1D(pool_size=int(conv.shape[1]))(conv)
         else:
             raise Exception("Invalid pooling parameter")
-        
+
         flatten = Flatten()(pool)
         conv_list.append(flatten)
-    
+
     concat = Concatenate()
     conv_output = concat(conv_list)
     return Model(inputs=input_node, outputs=conv_output)
 
 
-def add_aux_metadata(in_list, out_list, subject=False, party=False, credit=False, pos=False):
+def add_aux_metadata(
+        in_list,
+        out_list,
+        subject=False,
+        party=False,
+        credit=False,
+        pos=False):
     '''
-    Adds input and output tensors to in_list and out_list respectively based 
+    Adds input and output tensors to in_list and out_list respectively based
     on whether the subject, party, credit, and pos metadata is used.
 
     Inputs:
@@ -62,36 +75,63 @@ def add_aux_metadata(in_list, out_list, subject=False, party=False, credit=False
       credit: boolean representing whether the credit metadata is used
       pos: boolean representing whether the part of speech metadata is used
     '''
-     # Create auxiliary metadata models
+    # Create auxiliary metadata models
     if subject:
         print("Using Subject Metadata")
-        aux_in_subject = Input(shape=(var.NUM_SUBJECTS,), dtype='float32', name='aux_in_subject')
+        aux_in_subject = Input(
+            shape=(
+                var.NUM_SUBJECTS,
+            ),
+            dtype='float32',
+            name='aux_in_subject')
         in_list.append(aux_in_subject)
         out_list.append(aux_in_subject)
     if party:
         print("Using Party Metadata")
-        aux_in_party = Input(shape=(var.NUM_PARTIES,), dtype='float32', name='aux_in_party')
+        aux_in_party = Input(
+            shape=(
+                var.NUM_PARTIES,
+            ),
+            dtype='float32',
+            name='aux_in_party')
         in_list.append(aux_in_party)
         out_list.append(aux_in_party)
     if credit:
         print("Using Credit Metadata")
-        aux_in_credit = Input(shape=(var.NUM_CREDIT_TYPES,), dtype='float32', name='aux_in_credit')
+        aux_in_credit = Input(
+            shape=(
+                var.NUM_CREDIT_TYPES,
+            ),
+            dtype='float32',
+            name='aux_in_credit')
         in_list.append(aux_in_credit)
         out_list.append(aux_in_credit)
     if pos:
         print("Using Part of Speech Metadata")
-        aux_in_pos = Input(shape=(var.POS_TAG_SET_LENGTH,), dtype='float32', name='aux_in_pos')
+        aux_in_pos = Input(
+            shape=(
+                var.POS_TAG_SET_LENGTH,
+            ),
+            dtype='float32',
+            name='aux_in_pos')
         in_list.append(aux_in_pos)
         out_list.append(aux_in_pos)
 
 
-def cnn_model(embedding_matrix, num_words, pooling="MAX", subject=False, party=False, credit=False, pos=False):
+def cnn_model(
+        embedding_matrix,
+        num_words,
+        pooling="MAX",
+        subject=False,
+        party=False,
+        credit=False,
+        pos=False):
     '''
     Creates a CNN model with a Convolutional layer followed by a generic
     hidden layer and softmax combination.
 
     Inputs:
-      embedding_matrix: matrix of embeddings derived from Word2Vec or GloVe 
+      embedding_matrix: matrix of embeddings derived from Word2Vec or GloVe
       num_words: number of words in the embedding matrix
       pooling: The type of pooling to use (MAX, AVG, MAXOUT)
       subject: boolean representing whether the subject metadata is used
@@ -104,7 +144,12 @@ def cnn_model(embedding_matrix, num_words, pooling="MAX", subject=False, party=F
     '''
     # Maintain lists of model inputs and outputs
     # Create main embedding model
-    main_in = Input(shape=(var.MAX_SEQUENCE_LENGTH,), dtype='int32', name='main_in')
+    main_in = Input(
+        shape=(
+            var.MAX_SEQUENCE_LENGTH,
+        ),
+        dtype='int32',
+        name='main_in')
     main_out = Embedding(input_dim=num_words + 1,
                          output_dim=var.EMBEDDING_DIM,
                          weights=[embedding_matrix],
@@ -112,7 +157,7 @@ def cnn_model(embedding_matrix, num_words, pooling="MAX", subject=False, party=F
                          trainable=var.TRAIN_EMBEDDINGS)(main_in)
     main_out = conv_layer(pooling, var.EMBEDDING_DIM)(main_out)
     main_out = Dropout(rate=var.DROPOUT_PROB)(main_out)
-    
+
     in_list = [main_in]
     out_list = [main_out]
 
@@ -131,17 +176,23 @@ def cnn_model(embedding_matrix, num_words, pooling="MAX", subject=False, party=F
     model.compile(loss='categorical_crossentropy',
                   optimizer=Adam(),
                   metrics=['acc'])
-    
+
     return model
 
 
-def bi_lstm_model(embedding_matrix, num_words, subject=False, party=False, credit=False, pos=False):
+def bi_lstm_model(
+        embedding_matrix,
+        num_words,
+        subject=False,
+        party=False,
+        credit=False,
+        pos=False):
     '''
-    Creates a Bi-LSTM model using a Bidirection LSTM layer followed by a generic
-    hidden layer and softmax combination.
+    Creates a Bi-LSTM model using a Bidirection LSTM layer followed by a
+    generic hidden layer and softmax combination.
 
     Inputs:
-      embedding_matrix: matrix of embeddings derived from Word2Vec or GloVe 
+      embedding_matrix: matrix of embeddings derived from Word2Vec or GloVe
       num_words: number of words in the embedding matrix
       pooling: The type of pooling to use (MAX, AVG, MAXOUT)
       subject: boolean representing whether the subject metadata is used
@@ -153,7 +204,12 @@ def bi_lstm_model(embedding_matrix, num_words, subject=False, party=False, credi
       Returns keras Model which represents a complete Bi-LSTM neural network
     '''
     # Create main embedding model
-    main_in = Input(shape=(var.MAX_SEQUENCE_LENGTH,), dtype='int32', name='main_in')
+    main_in = Input(
+        shape=(
+            var.MAX_SEQUENCE_LENGTH,
+        ),
+        dtype='int32',
+        name='main_in')
     main_out = Embedding(input_dim=num_words + 1,
                          output_dim=var.EMBEDDING_DIM,
                          weights=[embedding_matrix],
@@ -184,18 +240,25 @@ def bi_lstm_model(embedding_matrix, num_words, subject=False, party=False, credi
     model.compile(loss='categorical_crossentropy',
                   optimizer=Adam(),
                   metrics=['acc'])
-   
+
     return model
 
 
-def bi_lstm_cnn_model(embedding_matrix, num_words, pooling="MAX", subject=False, party=False, credit=False, pos=False):
+def bi_lstm_cnn_model(
+        embedding_matrix,
+        num_words,
+        pooling="MAX",
+        subject=False,
+        party=False,
+        credit=False,
+        pos=False):
     '''
-    Creates a stacked Bi-LSTM and CNN model involving a Bidirectional LSTM layer
-    followed by a Convolutional layer followed by a generic hidden layer and 
-    softmax combination.
+    Creates a stacked Bi-LSTM and CNN model involving a Bidirectional LSTM
+    layer followed by a Convolutional layer followed by a generic hidden
+    layer and softmax combination.
 
     Inputs:
-      embedding_matrix: matrix of embeddings derived from Word2Vec or GloVe 
+      embedding_matrix: matrix of embeddings derived from Word2Vec or GloVe
       num_words: number of words in the embedding matrix
       pooling: The type of pooling to use (MAX, AVG, MAXOUT)
       subject: boolean representing whether the subject metadata is used
@@ -204,11 +267,16 @@ def bi_lstm_cnn_model(embedding_matrix, num_words, pooling="MAX", subject=False,
       pos: boolean representing whether the part of speech metadata is used
 
     Output:
-      Returns keras Model which represents a complete stacked Bi-LSTM and CNN 
+      Returns keras Model which represents a complete stacked Bi-LSTM and CNN
       neural network
     '''
     # Create main embedding model
-    main_in = Input(shape=(var.MAX_SEQUENCE_LENGTH,), dtype='int32', name='main_in')
+    main_in = Input(
+        shape=(
+            var.MAX_SEQUENCE_LENGTH,
+        ),
+        dtype='int32',
+        name='main_in')
     main_out = Embedding(input_dim=num_words + 1,
                          output_dim=var.EMBEDDING_DIM,
                          weights=[embedding_matrix],
@@ -239,18 +307,24 @@ def bi_lstm_cnn_model(embedding_matrix, num_words, pooling="MAX", subject=False,
     model.compile(loss='categorical_crossentropy',
                   optimizer=Adam(),
                   metrics=['acc'])
-    
+
     return model
 
 
-def cnn_bi_lstm_model(embedding_matrix, num_words, subject=False, party=False, credit=False, pos=False):
+def cnn_bi_lstm_model(
+        embedding_matrix,
+        num_words,
+        subject=False,
+        party=False,
+        credit=False,
+        pos=False):
     '''
     Creates a stacked CNN and Bi-LSTM model involving a Convolutional layer
-    followed by a Bidirectional LSTM layer followed by a generic hidden layer and 
-    softmax combination.
+    followed by a Bidirectional LSTM layer followed by a generic hidden layer
+    and softmax combination.
 
     Inputs:
-      embedding_matrix: matrix of embeddings derived from Word2Vec or GloVe 
+      embedding_matrix: matrix of embeddings derived from Word2Vec or GloVe
       num_words: number of words in the embedding matrix
       pooling: The type of pooling to use (MAX, AVG, MAXOUT)
       subject: boolean representing whether the subject metadata is used
@@ -263,7 +337,12 @@ def cnn_bi_lstm_model(embedding_matrix, num_words, subject=False, party=False, c
       neural network
     '''
     # Create main embedding model
-    main_in = Input(shape=(var.MAX_SEQUENCE_LENGTH,), dtype='int32', name='main_in')
+    main_in = Input(
+        shape=(
+            var.MAX_SEQUENCE_LENGTH,
+        ),
+        dtype='int32',
+        name='main_in')
     main_out = Embedding(input_dim=num_words + 1,
                          output_dim=var.EMBEDDING_DIM,
                          weights=[embedding_matrix],
@@ -289,7 +368,7 @@ def cnn_bi_lstm_model(embedding_matrix, num_words, subject=False, party=False, c
         combined_out = Concatenate()(out_list)
     else:
         combined_out = out_list
-   
+
     hidden = Dense(var.HIDDEN_LAYER_SIZE, activation='relu')(combined_out)
     hidden = Dropout(rate=var.DROPOUT_PROB)(hidden)
     predictions = Dense(len(var.LABEL_MAPPING), activation='softmax')(hidden)
@@ -297,17 +376,25 @@ def cnn_bi_lstm_model(embedding_matrix, num_words, subject=False, party=False, c
     model.compile(loss='categorical_crossentropy',
                   optimizer=Adam(),
                   metrics=['acc'])
-  
+
     return model
 
-def parallel_cnn_bi_lstm_model(embedding_matrix, num_words, pooling="MAX", subject=False, party=False, credit=False, pos=False):
+
+def parallel_cnn_bi_lstm_model(
+        embedding_matrix,
+        num_words,
+        pooling="MAX",
+        subject=False,
+        party=False,
+        credit=False,
+        pos=False):
     '''
     Creates a parallel CNN and Bi-LSTM model involving a Convolutional layer
-    and a Bidirectional LSTM layer which are combined and fed into a generic 
+    and a Bidirectional LSTM layer which are combined and fed into a generic
     hidden layer and softmax combination.
 
     Inputs:
-      embedding_matrix: matrix of embeddings derived from Word2Vec or GloVe 
+      embedding_matrix: matrix of embeddings derived from Word2Vec or GloVe
       num_words: number of words in the embedding matrix
       pooling: The type of pooling to use (MAX, AVG, MAXOUT)
       subject: boolean representing whether the subject metadata is used
@@ -321,7 +408,12 @@ def parallel_cnn_bi_lstm_model(embedding_matrix, num_words, pooling="MAX", subje
     '''
 
     # input handling
-    main_in = Input(shape=(var.MAX_SEQUENCE_LENGTH,), dtype='int32', name='main_in')
+    main_in = Input(
+        shape=(
+            var.MAX_SEQUENCE_LENGTH,
+        ),
+        dtype='int32',
+        name='main_in')
     main_out = Embedding(input_dim=num_words + 1,
                          output_dim=var.EMBEDDING_DIM,
                          weights=[embedding_matrix],
@@ -350,7 +442,7 @@ def parallel_cnn_bi_lstm_model(embedding_matrix, num_words, pooling="MAX", subje
         combined_out = Concatenate()(out_list)
     else:
         combined_out = out_list
-    
+
     hidden = Dense(var.HIDDEN_LAYER_SIZE, activation='relu')(combined_out)
     hidden = Dropout(rate=var.DROPOUT_PROB)(hidden)
     predictions = Dense(len(var.LABEL_MAPPING), activation='softmax')(hidden)
@@ -358,6 +450,5 @@ def parallel_cnn_bi_lstm_model(embedding_matrix, num_words, pooling="MAX", subje
     model.compile(loss='categorical_crossentropy',
                   optimizer=Adam(),
                   metrics=['acc'])
-  
-    return model
 
+    return model
