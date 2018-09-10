@@ -4,6 +4,10 @@ from parse_data import clean_credit, get_data
 import var
 
 def max_credit_model():
+    '''
+    Computes the accuracy of a "max credit" model where each statement is labeled
+    with the most frequent label of the previous statements by the speaker.
+    '''
     print("NUM CORRECT", "\t", "ACCURACY")
 
     train_labels, _, _, _, train_credit = get_data(var.TRAINING_DATA_PATH)
