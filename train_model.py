@@ -13,6 +13,11 @@ from definitions_of_models import cnn_model, bi_lstm_model, bi_lstm_cnn_model, c
 import var
 
 def train_model():
+    '''
+    Trains a model using the parameters specified in var.py. The model training checkpoints
+    are saved to var.FOLDER_NAME. A copy of the var.py used is also saved in that folder. Only the lowest
+    val loss models for each trained model is saved.
+    '''
     copyfile('var.py', os.path.join(var.FOLDER_NAME, 'var.py'))
 
     print("Reading word vectors... ")

@@ -1,3 +1,5 @@
+# File containing all of the parameters to be used for train_model or test_model
+
 # Metadata Selection
 # NOTE: When testing, the parameters in this section must be the same as training
 USE_SUBJECTS = True

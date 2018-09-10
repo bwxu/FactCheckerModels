@@ -13,7 +13,10 @@ from parse_data import get_data, get_mapping, get_one_hot_vectors, normalize_vec
 import var
 
 def test_model():
-    # Load the trained model to test. Model path should be the first argument
+    '''
+    Evaluates a saved model against eval and test sets. The trained model folder path should
+    be the first argument. All saved models inside that folder will be evaluated.
+    '''
     paths = None
     if len(sys.argv) < 2:
         raise Exception("Must specify the path to the folder of the saved model to test")
