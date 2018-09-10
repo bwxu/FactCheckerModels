@@ -74,14 +74,14 @@ urllib3==1.22
 Werkzeug==0.14.1  
 
 ## File & Folder Descriptions
-data: folder used to store data such as embeddings data and train, eval, test datasets  
-definitions_of_models.py: contains keras definitions of all neural models used  
-misc: folder containing code for a simple "max credit" model that predicts labels
+**data**: folder used to store data such as embeddings data and train, eval, test datasets  
+**definitions_of_models.py**: contains keras definitions of all neural models used  
+**misc**: folder containing code for a simple "max credit" model that predicts labels
       corresponding to the most frequent past labels from the same speaker  
-models: folder used as location to save trained models  
-parse_data.py: contains functions used for data processing  
-test_model.py: code used to test trained models loading them and predicting the eval 
+**models**: folder used as location to save trained models  
+**parse_data.py**: contains functions used for data processing  
+**test_model.py**: code used to test trained models loading them and predicting the eval 
                and test sets.  
-train_model.py: code used to train models in accordance with parameters in var.py  
-var.py: file used to indicate what parameters should be used to train or test  
+**train_model.py**: code used to train models in accordance with parameters in var.py  
+**var.py**: file used to indicate what parameters should be used to train or test  
 
