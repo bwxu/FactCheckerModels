@@ -1,10 +1,3 @@
-'''
-definitions_of_models.py
-
-This file contains many tensorflow model architectures for extracting features
-from sentences.
-'''
-
 from keras.layers import Activation, AveragePooling1D, Bidirectional, \
                         Concatenate, Conv1D, Dense, Dropout, Embedding, \
                         Flatten, Input, LSTM, MaxPooling1D, Permute
