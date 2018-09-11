@@ -1,4 +1,4 @@
-# FactCheckerCNN
+# FactCheckerModels
 ## Introduction
 This code contains several neural models using Bi-LSTM and CNN architectures 
 applied on the LIAR dataset. The data from the LIAR dataset is derived from 
