@@ -15,7 +15,16 @@ The original paper describing the dataset can be found here:
 https://arxiv.org/abs/1705.00648
 
 ## How to Run Models
-First, go to var.py and specify what model and what parameters you want to use
+First, download the train, eval, and test sets from the following link and 
+save them in the data folder 
+  https://www.cs.ucsb.edu/~william/data/liar_dataset.zip
+Also, download your favorite embeddings and add them to the data folder also.
+  Word2Vec on Google News: https://github.com/mmihaltz/word2vec-GoogleNews-vectors
+  GloVe: https://nlp.stanford.edu/projects/glove/
+Following the downloads, be sure to set the Location of data files section of
+var.py appropriately.
+
+Then, go to var.py and specify what model and what parameters you want to use
 for the model. Ensure that the "FOLDER_NAME" is set properly to where you want
 to save the trained model checkpoints.
 
